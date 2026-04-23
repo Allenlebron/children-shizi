@@ -32,12 +32,34 @@ body {
   box-shadow: 0 18px 40px rgba(90, 62, 34, 0.12);
 }
 
+.hero-stack {
+  display: grid;
+  gap: 16px;
+  max-width: 420px;
+  margin: 0 auto;
+}
+
 .panel-card {
   max-width: 420px;
   margin: 0 auto;
   padding: 20px;
   border-radius: 20px;
   background: rgba(255, 250, 243, 0.92);
+}
+
+input {
+  width: 100%;
+  min-height: 44px;
+  margin: 8px 0 12px;
+  border: 1px solid #d9c4ab;
+  border-radius: 14px;
+  padding: 0 14px;
+  background: white;
+  font-size: 16px;
+}
+
+.card-list {
+  padding-left: 20px;
 }
 
 .bottom-nav {
