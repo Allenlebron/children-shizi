@@ -16,11 +16,11 @@ body {
 
 .page-shell {
   min-height: 100vh;
-  padding-bottom: 88px;
+  padding-bottom: calc(88px + env(safe-area-inset-bottom));
 }
 
 .page-main {
-  padding: 24px 16px 96px;
+  padding: 24px 16px calc(96px + env(safe-area-inset-bottom));
 }
 
 .hero-card {
@@ -43,7 +43,7 @@ body {
 .bottom-nav {
   position: fixed;
   left: 50%;
-  bottom: 16px;
+  bottom: calc(16px + env(safe-area-inset-bottom));
   transform: translateX(-50%);
   display: flex;
   gap: 12px;
@@ -53,8 +53,17 @@ body {
 }
 
 .bottom-nav a {
+  min-width: 64px;
+  padding: 10px 14px;
+  border-radius: 999px;
   color: white;
+  text-align: center;
   text-decoration: none;
+}
+
+.bottom-nav a[aria-current='page'] {
+  background: rgba(255, 255, 255, 0.92);
+  color: #2f2418;
 }
 
 .eyebrow {
