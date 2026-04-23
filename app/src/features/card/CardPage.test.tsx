@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { MemoryRouter, useLocation } from 'react-router-dom'
 import App from '../../app/App'
 import { getCardBySlug } from '../../content/cards'
+import { readProgress } from '../../lib/progress/store'
 
 const originalSpeechSynthesis = Object.getOwnPropertyDescriptor(window, 'speechSynthesis')
 const originalSpeechSynthesisUtterance = Object.getOwnPropertyDescriptor(
@@ -39,6 +40,7 @@ function restoreWindowProperty(
 }
 
 afterEach(() => {
+  localStorage.clear()
   restoreWindowProperty('speechSynthesis', originalSpeechSynthesis)
   restoreWindowProperty('SpeechSynthesisUtterance', originalSpeechSynthesisUtterance)
 
@@ -85,12 +87,58 @@ it('renders the card story flow and speaks the story aloud', async () => {
   expect(screen.getByText('家长小提示')).toBeInTheDocument()
   expect(screen.getByText('词和句子')).toBeInTheDocument()
   expect(screen.getByText('我们站起来转一转，找一找哪边是北。')).toBeInTheDocument()
+  expect(screen.getByRole('button', { name: '收藏这张卡' })).toBeInTheDocument()
   expect(screen.getByRole('button', { name: '今天这张读完了' })).toBeInTheDocument()
 
   await user.click(screen.getByRole('button', { name: '听这个故事' }))
 
   expect(speak).toHaveBeenCalledTimes(1)
   expect(speak.mock.calls[0]?.[0]).toMatchObject({ text: card?.storyText })
+})
+
+it('saves progress when the family favorites and completes a card', async () => {
+  const user = userEvent.setup()
+
+  renderApp('/cards/bei')
+
+  await user.click(screen.getByRole('button', { name: '收藏这张卡' }))
+  await user.click(screen.getByRole('button', { name: '今天这张读完了' }))
+
+  expect(readProgress().bei.completed).toBe(true)
+  expect(readProgress().bei.favorite).toBe(true)
+})
+
+it('shows honest favorite button copy as the saved favorite state changes', async () => {
+  const user = userEvent.setup()
+
+  renderApp('/cards/bei')
+
+  await user.click(screen.getByRole('button', { name: '收藏这张卡' }))
+
+  expect(screen.getByRole('button', { name: '取消收藏' })).toBeInTheDocument()
+  expect(readProgress().bei.favorite).toBe(true)
+
+  await user.click(screen.getByRole('button', { name: '取消收藏' }))
+
+  expect(screen.getByRole('button', { name: '收藏这张卡' })).toBeInTheDocument()
+  expect(readProgress().bei.favorite).toBe(false)
+})
+
+it('reflects an existing saved favorite when the card page opens', () => {
+  localStorage.setItem(
+    'hanzi-h5-progress',
+    JSON.stringify({
+      bei: {
+        completed: false,
+        favorite: true,
+        lastOpenedAt: '2026-04-23T08:00:00.000Z',
+      },
+    }),
+  )
+
+  renderApp('/cards/bei')
+
+  expect(screen.getByRole('button', { name: '取消收藏' })).toBeInTheDocument()
 })
 
 it('shows when story audio is unavailable in this browser', () => {

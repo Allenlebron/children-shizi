@@ -1,14 +1,20 @@
-import { useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { getCardBySlug } from '../../content/cards'
 import { speak, supportsSpeechSynthesis } from '../../lib/audio/speak'
+import { markCompleted, readProgress, toggleFavorite } from '../../lib/progress/store'
 
 export function CardPage() {
   const navigate = useNavigate()
   const { slug = '' } = useParams()
   const readingFlowRef = useRef<HTMLElement | null>(null)
+  const [isFavorite, setIsFavorite] = useState(false)
   const card = getCardBySlug(slug)
   const canPlayStory = supportsSpeechSynthesis()
+
+  useEffect(() => {
+    setIsFavorite(readProgress()[slug]?.favorite ?? false)
+  }, [slug])
 
   if (!card) {
     return (
@@ -103,7 +109,23 @@ export function CardPage() {
       </section>
 
       <div className="card-finish">
-        <button type="button" onClick={() => navigate('/')}>
+        <button
+          className="button-secondary"
+          type="button"
+          onClick={() => {
+            toggleFavorite(card.slug)
+            setIsFavorite((currentFavorite) => !currentFavorite)
+          }}
+        >
+          {isFavorite ? '取消收藏' : '收藏这张卡'}
+        </button>
+        <button
+          type="button"
+          onClick={() => {
+            markCompleted(card.slug)
+            navigate('/')
+          }}
+        >
           今天这张读完了
         </button>
       </div>
