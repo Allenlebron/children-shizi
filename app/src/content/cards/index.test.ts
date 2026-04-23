@@ -12,10 +12,13 @@ describe('card registry', () => {
   })
 
   it('keeps the registry isolated when the returned list is mutated', () => {
-    const cards = listCards() as unknown as Array<unknown>
-    cards.push('mutated')
+    const [card] = listCards()
+    card.character = '南'
+    card.words.push('南边')
 
-    expect(listCards()).toHaveLength(1)
+    expect(getCardBySlug('bei')?.character).toBe('北')
+    expect(getCardBySlug('bei')?.words).toEqual(['北边', '北风', '北极熊'])
+    expect(listCards()[0]?.character).toBe('北')
   })
 
   it('finds the seeded card by a normalized slug query', () => {

@@ -2,24 +2,34 @@ import { beiCard } from './bei'
 
 const cards = [beiCard]
 
+function cloneCard(card: (typeof cards)[number]) {
+  return {
+    ...card,
+    words: [...card.words],
+    sentences: [...card.sentences],
+  }
+}
+
 export function listCards() {
-  return [...cards]
+  return cards.map(cloneCard)
 }
 
 export function getDailyCard() {
-  return cards[0]
+  return cards[0] ? cloneCard(cards[0]) : undefined
 }
 
 export function getCardBySlug(slug: string) {
-  return cards.find((card) => card.slug === slug)
+  const card = cards.find((card) => card.slug === slug)
+  return card ? cloneCard(card) : undefined
 }
 
 export function findCardByQuery(query: string) {
   const normalized = query.trim().toLowerCase()
-  return cards.find(
+  const card = cards.find(
     (card) =>
       card.slug === normalized ||
       card.character === query.trim() ||
       card.pinyin.toLowerCase() === normalized,
   )
+  return card ? cloneCard(card) : undefined
 }
