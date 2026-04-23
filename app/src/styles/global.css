@@ -237,3 +237,16 @@ button:disabled {
 .card-missing p {
   margin: 0;
 }
+
+@media (min-width: 768px) {
+  .page-main {
+    padding: 40px 24px calc(104px + env(safe-area-inset-bottom));
+  }
+
+  .hero-card,
+  .hero-stack,
+  .panel-card,
+  .card-storybook {
+    max-width: 480px;
+  }
+}
