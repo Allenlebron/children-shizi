@@ -1,12 +1,20 @@
+import { Navigate, Route, Routes } from 'react-router-dom'
+import { CardPage } from '../features/card/CardPage'
+import { HomePage } from '../features/home/HomePage'
+import { LibraryPage } from '../features/library/LibraryPage'
+import { ProfilePage } from '../features/profile/ProfilePage'
+import { AppShell } from '../layout/AppShell'
+
 export default function App() {
   return (
-    <main className="app-shell">
-      <section className="hero-card">
-        <p className="eyebrow">今天的故事字</p>
-        <h1>北</h1>
-        <p>先把一张卡带顺，再慢慢扩到更多字。</p>
-        <button type="button">开始今天这张卡</button>
-      </section>
-    </main>
+    <Routes>
+      <Route element={<AppShell />}>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/cards" element={<LibraryPage />} />
+        <Route path="/cards/:slug" element={<CardPage />} />
+        <Route path="/me" element={<ProfilePage />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Route>
+    </Routes>
   )
 }
