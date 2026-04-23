@@ -3,7 +3,7 @@ import { beiCard } from './bei'
 const cards = [beiCard]
 
 export function listCards() {
-  return cards
+  return [...cards]
 }
 
 export function getDailyCard() {
