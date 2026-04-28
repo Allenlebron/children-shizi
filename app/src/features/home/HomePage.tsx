@@ -1,28 +1,61 @@
 import { type FormEvent, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { findCardByQuery, getDailyCard } from '../../content/cards'
+import { generateCard, resolveSearch } from '../../lib/api/client'
 
 export function HomePage() {
   const navigate = useNavigate()
   const dailyCard = getDailyCard()!
   const [query, setQuery] = useState('')
-  const [missMessage, setMissMessage] = useState('')
+  const [statusMessage, setStatusMessage] = useState('')
+  const [isSearching, setIsSearching] = useState(false)
   const trimmedQuery = query.trim()
 
-  function openQuery(event: FormEvent) {
+  async function openQuery(event: FormEvent) {
     event.preventDefault()
-    if (!trimmedQuery) {
+    if (!trimmedQuery || isSearching) {
       return
     }
 
-    const card = findCardByQuery(query)
+    const card = findCardByQuery(trimmedQuery)
     if (card) {
-      setMissMessage('')
+      setStatusMessage('')
       navigate(`/cards/${card.slug}`)
       return
     }
 
-    setMissMessage('没找到这个字卡')
+    setIsSearching(true)
+
+    try {
+      const resolved = await resolveSearch(trimmedQuery)
+
+      if (resolved.status === 'unsupported') {
+        setStatusMessage('首版暂不支持这个字')
+        return
+      }
+
+      if (resolved.status === 'ready_private' || resolved.status === 'ready_public') {
+        setStatusMessage('')
+        navigate(`/cards/${resolved.cardId}`)
+        return
+      }
+
+      setStatusMessage('正在为你准备...')
+
+      const generated = await generateCard(trimmedQuery)
+
+      if (generated.status === 'ready_private') {
+        setStatusMessage('')
+        navigate(`/cards/${generated.cardId}`)
+        return
+      }
+
+      setStatusMessage('这个字还没准备好')
+    } catch {
+      setStatusMessage('网络有点忙，请再试一次')
+    } finally {
+      setIsSearching(false)
+    }
   }
 
   return (
@@ -43,17 +76,17 @@ export function HomePage() {
           value={query}
           onChange={(event) => {
             setQuery(event.target.value)
-            if (missMessage) {
-              setMissMessage('')
+            if (statusMessage) {
+              setStatusMessage('')
             }
           }}
         />
-        <button type="submit" disabled={!trimmedQuery}>
-          打开这个字卡
+        <button type="submit" disabled={!trimmedQuery || isSearching}>
+          {isSearching ? '正在准备...' : '打开这个字卡'}
         </button>
-        {missMessage ? (
+        {statusMessage ? (
           <p className="field-hint" role="status" aria-live="polite">
-            {missMessage}
+            {statusMessage}
           </p>
         ) : null}
       </form>

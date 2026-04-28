@@ -1,22 +1,79 @@
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { getCardBySlug } from '../../content/cards'
+import type { CardDocument } from '../../content/types'
 import { speak, supportsSpeechSynthesis } from '../../lib/audio/speak'
+import { loadCardDocument } from '../../lib/cards/loadCardDocument'
 import { markCompleted, readProgress, toggleFavorite } from '../../lib/progress/store'
 
 export function CardPage() {
   const navigate = useNavigate()
-  const { slug = '' } = useParams()
+  const { cardId = '' } = useParams()
+  const initialCurated = getCardBySlug(cardId)
   const readingFlowRef = useRef<HTMLElement | null>(null)
   const [isFavorite, setIsFavorite] = useState(false)
-  const card = getCardBySlug(slug)
+  const [document, setDocument] = useState<CardDocument | null>(() =>
+    initialCurated
+      ? {
+          cardId: initialCurated.slug,
+          access: 'curated',
+          card: initialCurated,
+        }
+      : null,
+  )
+  const [isLoading, setIsLoading] = useState(!initialCurated)
   const canPlayStory = supportsSpeechSynthesis()
 
   useEffect(() => {
-    setIsFavorite(readProgress()[slug]?.favorite ?? false)
-  }, [slug])
+    let cancelled = false
 
-  if (!card) {
+    const curated = getCardBySlug(cardId)
+    if (curated) {
+      setDocument({
+        cardId: curated.slug,
+        access: 'curated',
+        card: curated,
+      })
+      setIsFavorite(readProgress()[cardId]?.favorite ?? false)
+      setIsLoading(false)
+      return () => {
+        cancelled = true
+      }
+    }
+
+    setIsLoading(true)
+    setDocument(null)
+
+    loadCardDocument(cardId)
+      .then((nextDocument) => {
+        if (cancelled) {
+          return
+        }
+
+        setDocument(nextDocument)
+        setIsFavorite(nextDocument ? (readProgress()[nextDocument.cardId]?.favorite ?? false) : false)
+      })
+      .finally(() => {
+        if (!cancelled) {
+          setIsLoading(false)
+        }
+      })
+
+    return () => {
+      cancelled = true
+    }
+  }, [cardId])
+
+  if (isLoading) {
+    return (
+      <section className="panel-card card-missing">
+        <p className="eyebrow">学习页</p>
+        <p>正在把这张字卡拿给你...</p>
+      </section>
+    )
+  }
+
+  if (!document) {
     return (
       <section className="panel-card card-missing">
         <p className="eyebrow">学习页</p>
@@ -28,6 +85,13 @@ export function CardPage() {
       </section>
     )
   }
+
+  const { card, access } = document
+  const snapshot = {
+    cardId: document.cardId,
+    character: card.character,
+    source: access,
+  } as const
 
   return (
     <article className="card-storybook">
@@ -113,7 +177,7 @@ export function CardPage() {
           className="button-secondary"
           type="button"
           onClick={() => {
-            toggleFavorite(card.slug)
+            toggleFavorite(snapshot)
             setIsFavorite((currentFavorite) => !currentFavorite)
           }}
         >
@@ -122,7 +186,7 @@ export function CardPage() {
         <button
           type="button"
           onClick={() => {
-            markCompleted(card.slug)
+            markCompleted(snapshot)
             navigate('/')
           }}
         >

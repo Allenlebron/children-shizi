@@ -1,14 +1,10 @@
-import { listCards } from '../../content/cards'
+import { Link } from 'react-router-dom'
 import { readProgress } from '../../lib/progress/store'
 
 export function ProfilePage() {
-  const progress = readProgress()
-  const cardsWithProgress = listCards().filter((card) => {
-    const entry = progress[card.slug]
-    return entry?.completed || entry?.favorite
-  })
-  const completedCount = cardsWithProgress.filter((card) => progress[card.slug]?.completed).length
-  const favoriteCount = cardsWithProgress.filter((card) => progress[card.slug]?.favorite).length
+  const progress = Object.values(readProgress()).filter((entry) => entry.completed || entry.favorite)
+  const completedCount = progress.filter((entry) => entry.completed).length
+  const favoriteCount = progress.filter((entry) => entry.favorite).length
 
   return (
     <section className="panel-card">
@@ -16,8 +12,10 @@ export function ProfilePage() {
       <p>学过 {completedCount} 张</p>
       <p>收藏 {favoriteCount} 张</p>
       <ul className="card-list">
-        {cardsWithProgress.map((card) => (
-          <li key={card.slug}>{card.character}</li>
+        {progress.map((entry) => (
+          <li key={entry.cardId}>
+            <Link to={`/cards/${entry.cardId}`}>{entry.character}</Link>
+          </li>
         ))}
       </ul>
     </section>

@@ -12,3 +12,15 @@ export interface HanziCard {
   sentences: string[]
   activityPrompt: string
 }
+
+export interface CardDocument {
+  cardId: string
+  access: 'curated' | 'ready_private' | 'ready_public'
+  card: HanziCard
+}
+
+export interface ProgressSnapshot {
+  cardId: string
+  character: string
+  source: CardDocument['access']
+}
