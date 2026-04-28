@@ -13,6 +13,21 @@ export interface HanziCardPayload {
   activityPrompt: string
 }
 
+const latinLetterPattern = /[A-Za-z]/
+
+function userFacingCopy(card: HanziCardPayload) {
+  return [
+    card.theme,
+    card.heroLine,
+    card.storyScene,
+    card.storyText,
+    card.parentPrompt,
+    card.activityPrompt,
+    ...card.words,
+    ...card.sentences,
+  ]
+}
+
 export function validateGeneratedCard(card: HanziCardPayload, query: string) {
   const issues: string[] = []
 
@@ -28,11 +43,14 @@ export function validateGeneratedCard(card: HanziCardPayload, query: string) {
   if (card.sentences.length !== 2) {
     issues.push('must return exactly 2 sentences')
   }
-  if (!card.words.some((word) => word.includes(query))) {
-    issues.push('words must include the character')
+  if (!card.words.every((word) => word.includes(query))) {
+    issues.push('all words must include the character')
   }
-  if (!card.sentences.some((sentence) => sentence.includes(query))) {
-    issues.push('sentences must include the character')
+  if (!card.sentences.every((sentence) => sentence.includes(query))) {
+    issues.push('all sentences must include the character')
+  }
+  if (userFacingCopy(card).some((copy) => latinLetterPattern.test(copy))) {
+    issues.push('user-facing copy must be Chinese')
   }
   if (/甲骨文|部首|象形字/.test(card.parentPrompt)) {
     issues.push('parentPrompt sounds like a lecture')

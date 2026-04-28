@@ -95,7 +95,7 @@ export function createWorker(overrides: WorkerOverrides = {}): ExportedHandler<E
       }
 
       if (request.method === 'GET' && url.pathname.startsWith('/api/cards/')) {
-        const cardId = url.pathname.replace('/api/cards/', '')
+        const cardId = decodeURIComponent(url.pathname.replace('/api/cards/', ''))
         const browserId = request.headers.get('x-browser-id') ?? ''
         const document = await repository.findCardForBrowser(cardId, browserId)
 

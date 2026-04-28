@@ -62,8 +62,26 @@ export function createOpenAIGenerator(env: Env): CardGenerator {
       return openaiJson<HanziCardPayload>(env, {
         model: env.OPENAI_MODEL,
         messages: [
-          { role: 'system', content: 'Return only JSON for a parent-led Hanzi card.' },
-          { role: 'user', content: `Generate a 5-minute Hanzi card for "${query}".` },
+          {
+            role: 'system',
+            content:
+              'Return only JSON for a parent-led Hanzi card. Make the card warm, concrete, and easy for a parent to read aloud to a 3-6 year old child. Never explain etymology, radicals, oracle bone script, or textbook knowledge.',
+          },
+          {
+            role: 'user',
+            content: [
+              `Generate a 5-minute Hanzi card for "${query}".`,
+              'Hard requirements:',
+              `1. character must be exactly "${query}".`,
+              '2. estimatedMinutes must be exactly 5.',
+              `3. words must contain exactly 3 short items, and every word must include "${query}".`,
+              `4. sentences must contain exactly 2 short child-friendly sentences, and every sentence must include "${query}".`,
+              '5. parentPrompt must guide the parent to point, ask, or act, not lecture.',
+              '6. activityPrompt must be a simple physical or observational activity for parent and child.',
+              '7. Except slug and pinyin, every user-facing string must be simplified Chinese only.',
+              '8. Do not use English words or ASCII letters in theme, heroLine, storyScene, storyText, parentPrompt, words, sentences, or activityPrompt.',
+            ].join('\n'),
+          },
         ],
         response_format: {
           type: 'json_schema',
@@ -79,8 +97,28 @@ export function createOpenAIGenerator(env: Env): CardGenerator {
       return openaiJson<HanziCardPayload>(env, {
         model: env.OPENAI_MODEL,
         messages: [
-          { role: 'system', content: 'Repair the JSON card without changing the target Hanzi.' },
-          { role: 'user', content: JSON.stringify({ query, previous, issues }) },
+          {
+            role: 'system',
+            content:
+              'Repair the JSON card without changing the target Hanzi. Return only corrected JSON. Preserve the gentle parent-led tone and satisfy every structural rule exactly.',
+          },
+          {
+            role: 'user',
+            content: JSON.stringify({
+              query,
+              previous,
+              issues,
+              rules: [
+                `character must stay exactly "${query}"`,
+                `all 3 words must include "${query}"`,
+                `all 2 sentences must include "${query}"`,
+                'estimatedMinutes must be 5',
+                'parentPrompt must not sound like a lecture',
+                'every user-facing field except slug and pinyin must be simplified Chinese only',
+                'do not use English words or ASCII letters in any read-aloud copy',
+              ],
+            }),
+          },
         ],
         response_format: {
           type: 'json_schema',
@@ -96,8 +134,26 @@ export function createOpenAIGenerator(env: Env): CardGenerator {
       return openaiJson<CardReviewResult>(env, {
         model: env.OPENAI_MODEL,
         messages: [
-          { role: 'system', content: 'Review whether this Hanzi card is safe and parent-friendly.' },
-          { role: 'user', content: JSON.stringify({ query, card }) },
+          {
+            role: 'system',
+            content:
+              'Review whether this Hanzi card is safe, parent-friendly, and structurally correct. Be strict about whether the target Hanzi appears where it must appear.',
+          },
+          {
+            role: 'user',
+            content: JSON.stringify({
+              query,
+              card,
+              checklist: [
+                `character must equal "${query}"`,
+                `all 3 words should include "${query}"`,
+                `all 2 sentences should include "${query}"`,
+                'user-facing copy should be simplified Chinese only, with no English words',
+                'parentPrompt should feel like guidance, not explanation',
+                'the overall tone should fit a 3-6 year old child and parent read-aloud flow',
+              ],
+            }),
+          },
         ],
         response_format: {
           type: 'json_schema',

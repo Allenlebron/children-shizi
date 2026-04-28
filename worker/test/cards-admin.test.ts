@@ -26,6 +26,44 @@ function repositoryStub(overrides: Record<string, unknown>) {
 }
 
 describe('cards and admin endpoints', () => {
+  it('decodes encoded private card ids before loading them', async () => {
+    const worker = createWorker({
+      repository: repositoryStub({
+        async findCardForBrowser(cardId: string, browserId: string) {
+          expect(cardId).toBe('priv-火-001')
+          expect(browserId).toBe('browser-alpha')
+
+          return {
+            cardId: 'priv-火-001',
+            access: 'ready_private',
+            card: {
+              character: '火',
+            },
+          }
+        },
+      }),
+    })
+
+    const response = await worker.fetch!(
+      new Request('http://example.com/api/cards/priv-%E7%81%AB-001', {
+        headers: {
+          'x-browser-id': 'browser-alpha',
+        },
+      }) as WorkerRequest,
+      env,
+      createExecutionContextStub(),
+    )
+
+    expect(response.status).toBe(200)
+    await expect(response.json()).resolves.toMatchObject({
+      cardId: 'priv-火-001',
+      access: 'ready_private',
+      card: {
+        character: '火',
+      },
+    })
+  })
+
   it('returns a private card only to the owning browser', async () => {
     const worker = createWorker({
       repository: repositoryStub({

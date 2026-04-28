@@ -2,6 +2,14 @@
   "name": "family-generated-search-api",
   "main": "src/index.ts",
   "compatibility_date": "2026-04-25",
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "family-generated-search",
+      "database_id": "00000000-0000-0000-0000-000000000000"
+    }
+  ],
+  "migrations_dir": "migrations",
   "vars": {
     "ALLOWED_ORIGIN": "http://localhost:5173",
     "OPENAI_API_BASE_URL": "https://api.openai.com/v1",
