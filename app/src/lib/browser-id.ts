@@ -1,9 +1,13 @@
 const STORAGE_KEY = 'hanzi-h5-browser-id'
 
 export function getBrowserId() {
-  const existing = window.localStorage.getItem(STORAGE_KEY)
-  if (existing) {
-    return existing
+  try {
+    const existing = window.localStorage.getItem(STORAGE_KEY)
+    if (existing) {
+      return existing
+    }
+  } catch {
+    // Keep search usable when browser storage is unavailable.
   }
 
   const next =
@@ -11,6 +15,11 @@ export function getBrowserId() {
       ? globalThis.crypto.randomUUID()
       : `browser-${Date.now()}`
 
-  window.localStorage.setItem(STORAGE_KEY, next)
+  try {
+    window.localStorage.setItem(STORAGE_KEY, next)
+  } catch {
+    // The generated id still works for this request even if it cannot be persisted.
+  }
+
   return next
 }
