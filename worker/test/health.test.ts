@@ -12,6 +12,35 @@ function createExecutionContextStub() {
 type WorkerRequest = Parameters<NonNullable<typeof worker.fetch>>[0]
 
 describe('worker health endpoint', () => {
+  it('allows preview token headers during CORS preflight', async () => {
+    const request = new Request('http://example.com/api/generate', {
+      method: 'OPTIONS',
+      headers: {
+        origin: 'http://localhost:5173',
+        'access-control-request-headers': 'content-type,x-browser-id,x-preview-token',
+        'access-control-request-method': 'POST',
+      },
+    }) as WorkerRequest
+    const env: Env = {
+      DB: {} as D1Database,
+      ALLOWED_ORIGIN: 'http://localhost:5173',
+      OPENAI_API_BASE_URL: 'https://api.openai.com/v1',
+      OPENAI_API_KEY: 'test-key',
+      OPENAI_MODEL: 'gpt-4o-mini',
+      ADMIN_TOKEN: 'test-token',
+      PREVIEW_TOKEN: 'preview-token',
+    }
+
+    const response = await worker.fetch!(
+      request,
+      env,
+      createExecutionContextStub(),
+    )
+
+    expect(response.status).toBe(204)
+    expect(response.headers.get('access-control-allow-headers')).toContain('x-preview-token')
+  })
+
   it('returns ok json and CORS headers', async () => {
     const request = new Request('http://example.com/api/health', {
       headers: {

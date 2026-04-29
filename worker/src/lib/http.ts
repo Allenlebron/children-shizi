@@ -5,7 +5,7 @@ export function corsHeaders(origin: string | null, env: Env) {
 
   return {
     'access-control-allow-origin': allowedOrigin,
-    'access-control-allow-headers': 'content-type, authorization, x-browser-id',
+    'access-control-allow-headers': 'content-type, authorization, x-browser-id, x-preview-token',
     'access-control-allow-methods': 'GET, POST, OPTIONS',
     'access-control-allow-credentials': 'false',
   }
