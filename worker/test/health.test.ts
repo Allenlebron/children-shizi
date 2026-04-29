@@ -25,6 +25,7 @@ describe('worker health endpoint', () => {
       OPENAI_API_KEY: 'test-key',
       OPENAI_MODEL: 'gpt-4o-mini',
       ADMIN_TOKEN: 'test-token',
+      PREVIEW_TOKEN: 'preview-token',
     }
 
     const response = await worker.fetch!(

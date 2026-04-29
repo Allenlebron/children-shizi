@@ -1,15 +1,25 @@
-import { type FormEvent, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { type FormEvent, useEffect, useState } from 'react'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { findCardByQuery, getDailyCard } from '../../content/cards'
 import { generateCard, resolveSearch } from '../../lib/api/client'
+import { rememberPreviewToken } from '../../lib/preview-token'
 
 export function HomePage() {
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
   const dailyCard = getDailyCard()!
   const [query, setQuery] = useState('')
   const [statusMessage, setStatusMessage] = useState('')
   const [isSearching, setIsSearching] = useState(false)
   const trimmedQuery = query.trim()
+
+  useEffect(() => {
+    const previewToken = searchParams.get('previewToken')
+
+    if (previewToken) {
+      rememberPreviewToken(previewToken)
+    }
+  }, [searchParams])
 
   async function openQuery(event: FormEvent) {
     event.preventDefault()

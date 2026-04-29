@@ -71,6 +71,10 @@ export function createWorker(overrides: WorkerOverrides = {}): ExportedHandler<E
       }
 
       if (request.method === 'POST' && url.pathname === '/api/generate') {
+        if (request.headers.get('x-preview-token') !== env.PREVIEW_TOKEN) {
+          return json({ error: 'Preview token required' }, { status: 403 }, request, env)
+        }
+
         const { query } = (await request.json()) as { query?: unknown }
         const normalized = normalizeQuery(query)
         const browserId = request.headers.get('x-browser-id') ?? ''

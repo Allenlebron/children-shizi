@@ -93,6 +93,7 @@ describe('generatePrivateCard', () => {
       OPENAI_API_KEY: 'test-key',
       OPENAI_MODEL: 'gpt-4o-mini',
       ADMIN_TOKEN: 'test-token',
+      PREVIEW_TOKEN: 'preview-token',
     }
 
     const result = await generatePrivateCard(env, repository, 'browser-alpha', '木', generator)
@@ -139,6 +140,7 @@ describe('generatePrivateCard', () => {
       OPENAI_API_KEY: 'test-key',
       OPENAI_MODEL: 'gpt-4o-mini',
       ADMIN_TOKEN: 'test-token',
+      PREVIEW_TOKEN: 'preview-token',
     }
 
     const result = await generatePrivateCard(env, repository, 'browser-alpha', '木', generator)
@@ -186,6 +188,7 @@ describe('generate route', () => {
       OPENAI_API_KEY: 'test-key',
       OPENAI_MODEL: 'gpt-4o-mini',
       ADMIN_TOKEN: 'test-token',
+      PREVIEW_TOKEN: 'preview-token',
     }
     const worker = createWorker({
       repository,
@@ -198,6 +201,7 @@ describe('generate route', () => {
         headers: {
           'content-type': 'application/json',
           'x-browser-id': 'browser-alpha',
+          'x-preview-token': 'preview-token',
         },
         body: JSON.stringify({ query: '木' }),
       }) as WorkerRequest,
@@ -223,6 +227,7 @@ describe('generate route', () => {
       OPENAI_API_KEY: 'test-key',
       OPENAI_MODEL: 'gpt-4o-mini',
       ADMIN_TOKEN: 'test-token',
+      PREVIEW_TOKEN: 'preview-token',
     }
     const worker = createWorker({
       repository,
@@ -233,6 +238,7 @@ describe('generate route', () => {
         method: 'POST',
         headers: {
           'content-type': 'application/json',
+          'x-preview-token': 'preview-token',
         },
         body: JSON.stringify({ query: '木' }),
       }) as WorkerRequest,
@@ -241,5 +247,37 @@ describe('generate route', () => {
     )
 
     expect(response.status).toBe(400)
+  })
+
+  it('rejects generation without the preview token', async () => {
+    const { repository } = createRepositoryStub()
+    const env: Env = {
+      DB: {} as D1Database,
+      ALLOWED_ORIGIN: 'http://localhost:5173',
+      OPENAI_API_BASE_URL: 'https://api.openai.com/v1',
+      OPENAI_API_KEY: 'test-key',
+      OPENAI_MODEL: 'gpt-4o-mini',
+      ADMIN_TOKEN: 'test-token',
+      PREVIEW_TOKEN: 'preview-token',
+    }
+    const worker = createWorker({
+      repository,
+    } as never)
+
+    const response = await worker.fetch!(
+      new Request('http://example.com/api/generate', {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+          'x-browser-id': 'browser-alpha',
+        },
+        body: JSON.stringify({ query: '木' }),
+      }) as WorkerRequest,
+      env,
+      createExecutionContextStub(),
+    )
+
+    expect(response.status).toBe(403)
+    await expect(response.json()).resolves.toEqual({ error: 'Preview token required' })
   })
 })

@@ -5,4 +5,5 @@ export interface Env {
   OPENAI_API_KEY: string
   OPENAI_MODEL: string
   ADMIN_TOKEN: string
+  PREVIEW_TOKEN: string
 }

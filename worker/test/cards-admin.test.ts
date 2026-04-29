@@ -12,6 +12,7 @@ const env: Env = {
   OPENAI_API_KEY: 'test-key',
   OPENAI_MODEL: 'gpt-4o-mini',
   ADMIN_TOKEN: 'test-admin-token',
+  PREVIEW_TOKEN: 'preview-token',
 }
 
 function createExecutionContextStub() {

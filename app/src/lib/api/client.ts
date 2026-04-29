@@ -5,6 +5,7 @@ import type {
   GenerateCardResponse,
   ResolveSearchResponse,
 } from './contracts'
+import { getPreviewToken } from '../preview-token'
 
 const API_BASE_URL = import.meta.env.VITE_HANZI_API_BASE_URL ?? 'http://127.0.0.1:8787'
 
@@ -33,8 +34,15 @@ export function resolveSearch(query: string) {
 }
 
 export function generateCard(query: string) {
+  const previewToken = getPreviewToken()
+
   return request<GenerateCardResponse>('/api/generate', {
     method: 'POST',
+    headers: previewToken
+      ? {
+          'x-preview-token': previewToken,
+        }
+      : undefined,
     body: JSON.stringify({ query }),
   })
 }

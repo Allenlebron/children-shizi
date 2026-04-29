@@ -6,13 +6,13 @@
     {
       "binding": "DB",
       "database_name": "family-generated-search",
-      "database_id": "00000000-0000-0000-0000-000000000000"
+      "database_id": "ffc2259f-cd17-40f5-b1de-70d82b635b80",
+      "migrations_dir": "migrations"
     }
   ],
-  "migrations_dir": "migrations",
   "vars": {
-    "ALLOWED_ORIGIN": "http://localhost:5173",
-    "OPENAI_API_BASE_URL": "https://api.openai.com/v1",
-    "OPENAI_MODEL": "gpt-4o-mini"
+    "ALLOWED_ORIGIN": "*",
+    "OPENAI_API_BASE_URL": "https://integrate.api.nvidia.com/v1",
+    "OPENAI_MODEL": "meta/llama-3.3-70b-instruct"
   }
 }

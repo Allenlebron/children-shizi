@@ -116,3 +116,33 @@ it('generates a private card and navigates to the returned card id', async () =>
 
   expect(await screen.findByTestId('location')).toHaveTextContent('/cards/priv-mu-001')
 })
+
+it('sends the preview token when generating a card from a preview URL', async () => {
+  const user = userEvent.setup()
+  const fetchMock = vi
+    .spyOn(globalThis, 'fetch')
+    .mockResolvedValueOnce(
+      new Response(JSON.stringify({ status: 'needs_generation', query: '木' }), {
+        status: 200,
+        headers: { 'content-type': 'application/json' },
+      }),
+    )
+    .mockResolvedValueOnce(
+      new Response(JSON.stringify({ status: 'ready_private', query: '木', cardId: 'priv-mu-001' }), {
+        status: 200,
+        headers: { 'content-type': 'application/json' },
+      }),
+    )
+
+  renderApp('/?previewToken=family-preview')
+
+  await user.type(screen.getByLabelText(/搜一个字/i), '木')
+  await user.click(screen.getByRole('button', { name: /打开这个字卡/i }))
+
+  expect(await screen.findByTestId('location')).toHaveTextContent('/cards/priv-mu-001')
+  expect(fetchMock.mock.calls[1]?.[1]).toMatchObject({
+    headers: expect.objectContaining({
+      'x-preview-token': 'family-preview',
+    }),
+  })
+})
