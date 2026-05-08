@@ -10,7 +10,6 @@ const originalSpeechSynthesisUtterance = Object.getOwnPropertyDescriptor(
   window,
   'SpeechSynthesisUtterance',
 )
-const originalScrollIntoView = Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'scrollIntoView')
 
 function LocationProbe() {
   const { pathname } = useLocation()
@@ -44,15 +43,9 @@ afterEach(() => {
   vi.restoreAllMocks()
   restoreWindowProperty('speechSynthesis', originalSpeechSynthesis)
   restoreWindowProperty('SpeechSynthesisUtterance', originalSpeechSynthesisUtterance)
-
-  if (originalScrollIntoView) {
-    Object.defineProperty(HTMLElement.prototype, 'scrollIntoView', originalScrollIntoView)
-  } else {
-    Reflect.deleteProperty(HTMLElement.prototype, 'scrollIntoView')
-  }
 })
 
-it('renders the card story flow and speaks the story aloud', async () => {
+it('renders the paged card flow and speaks the story aloud from the story page', async () => {
   const user = userEvent.setup()
   const speak = vi.fn()
   const card = getCardBySlug('bei')
@@ -79,29 +72,29 @@ it('renders the card story flow and speaks the story aloud', async () => {
 
   renderApp('/cards/bei')
 
+  expect(screen.getByText('第 1 / 6 页')).toBeInTheDocument()
   expect(screen.getByText('故事画面')).toBeInTheDocument()
   expect(screen.getByText('一个小朋友转过身，背朝前面站着。')).toBeInTheDocument()
   expect(screen.getByRole('heading', { name: '北' })).toBeInTheDocument()
   expect(screen.getByText('今天用一个小故事认识“北”。')).toBeInTheDocument()
-  expect(screen.getByRole('button', { name: '听这个故事' })).toBeInTheDocument()
-  expect(screen.getByRole('button', { name: '我来慢慢讲' })).toBeInTheDocument()
-  expect(screen.getByText('家长小提示')).toBeInTheDocument()
-  expect(screen.getByText('词和句子')).toBeInTheDocument()
-  expect(screen.getByText('我们站起来转一转，找一找哪边是北。')).toBeInTheDocument()
-  expect(screen.getByRole('button', { name: '收藏这张卡' })).toBeInTheDocument()
-  expect(screen.getByRole('button', { name: '今天这张读完了' })).toBeInTheDocument()
 
+  await user.click(screen.getByRole('button', { name: '开始读这张卡' }))
   await user.click(screen.getByRole('button', { name: '听这个故事' }))
 
   expect(speak).toHaveBeenCalledTimes(1)
   expect(speak.mock.calls[0]?.[0]).toMatchObject({ text: card?.storyText })
 })
 
-it('saves progress when the family favorites and completes a card', async () => {
+it('saves progress when the family favorites and completes a card from the finish page', async () => {
   const user = userEvent.setup()
 
   renderApp('/cards/bei')
 
+  await user.click(screen.getByRole('button', { name: '开始读这张卡' }))
+  await user.click(screen.getByRole('button', { name: '下一页' }))
+  await user.click(screen.getByRole('button', { name: '下一页' }))
+  await user.click(screen.getByRole('button', { name: '下一页' }))
+  await user.click(screen.getByRole('button', { name: '下一页' }))
   await user.click(screen.getByRole('button', { name: '收藏这张卡' }))
   await user.click(screen.getByRole('button', { name: '今天这张读完了' }))
 
@@ -114,11 +107,16 @@ it('saves progress when the family favorites and completes a card', async () => 
   })
 })
 
-it('shows honest favorite button copy as the saved favorite state changes', async () => {
+it('shows honest favorite button copy as the saved favorite state changes on the finish page', async () => {
   const user = userEvent.setup()
 
   renderApp('/cards/bei')
 
+  await user.click(screen.getByRole('button', { name: '开始读这张卡' }))
+  await user.click(screen.getByRole('button', { name: '下一页' }))
+  await user.click(screen.getByRole('button', { name: '下一页' }))
+  await user.click(screen.getByRole('button', { name: '下一页' }))
+  await user.click(screen.getByRole('button', { name: '下一页' }))
   await user.click(screen.getByRole('button', { name: '收藏这张卡' }))
 
   expect(screen.getByRole('button', { name: '取消收藏' })).toBeInTheDocument()
@@ -130,7 +128,9 @@ it('shows honest favorite button copy as the saved favorite state changes', asyn
   expect(readProgress().bei.favorite).toBe(false)
 })
 
-it('reflects an existing saved favorite when the card page opens', () => {
+it('reflects an existing saved favorite when the finish page opens', async () => {
+  const user = userEvent.setup()
+
   localStorage.setItem(
     'hanzi-h5-progress',
     JSON.stringify({
@@ -144,10 +144,18 @@ it('reflects an existing saved favorite when the card page opens', () => {
 
   renderApp('/cards/bei')
 
+  await user.click(screen.getByRole('button', { name: '开始读这张卡' }))
+  await user.click(screen.getByRole('button', { name: '下一页' }))
+  await user.click(screen.getByRole('button', { name: '下一页' }))
+  await user.click(screen.getByRole('button', { name: '下一页' }))
+  await user.click(screen.getByRole('button', { name: '下一页' }))
+
   expect(screen.getByRole('button', { name: '取消收藏' })).toBeInTheDocument()
 })
 
-it('shows when story audio is unavailable in this browser', () => {
+it('shows when story audio is unavailable in this browser on the story page', async () => {
+  const user = userEvent.setup()
+
   Object.defineProperty(window, 'speechSynthesis', {
     configurable: true,
     value: undefined,
@@ -159,23 +167,12 @@ it('shows when story audio is unavailable in this browser', () => {
 
   renderApp('/cards/bei')
 
+  await user.click(screen.getByRole('button', { name: '开始读这张卡' }))
+
   expect(screen.getByRole('button', { name: '听这个故事' })).toBeDisabled()
-  expect(screen.getByText('这个浏览器暂时不能播放故事，可以直接往下读。')).toBeInTheDocument()
-})
-
-it('moves focus to the reading section when the family chooses to read slowly', async () => {
-  const user = userEvent.setup()
-
-  Object.defineProperty(HTMLElement.prototype, 'scrollIntoView', {
-    configurable: true,
-    value: vi.fn(),
-  })
-
-  renderApp('/cards/bei')
-
-  await user.click(screen.getByRole('button', { name: '我来慢慢讲' }))
-
-  expect(screen.getByLabelText('慢慢讲给孩子听')).toHaveFocus()
+  expect(
+    screen.getByText('这个浏览器暂时不能播放故事，可以直接读给孩子听。'),
+  ).toBeInTheDocument()
 })
 
 it('shows a gentle not-found state and lets the family go back home', async () => {
@@ -227,6 +224,11 @@ it('loads a generated private card from the API and saves progress by card id', 
 
   expect(await screen.findByRole('heading', { name: '木' })).toBeInTheDocument()
 
+  await user.click(screen.getByRole('button', { name: '开始读这张卡' }))
+  await user.click(screen.getByRole('button', { name: '下一页' }))
+  await user.click(screen.getByRole('button', { name: '下一页' }))
+  await user.click(screen.getByRole('button', { name: '下一页' }))
+  await user.click(screen.getByRole('button', { name: '下一页' }))
   await user.click(screen.getByRole('button', { name: '今天这张读完了' }))
 
   expect(readProgress()['priv-mu-001']).toMatchObject({
