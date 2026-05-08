@@ -32,7 +32,8 @@ it('navigates the daily card CTA to /cards/bei', async () => {
   await user.click(screen.getByRole('button', { name: /开始今天这张卡/i }))
 
   expect(screen.getByTestId('location')).toHaveTextContent('/cards/bei')
-  expect(screen.getByRole('heading', { name: /学习页/i })).toBeInTheDocument()
+  expect(screen.getByText('第 1 / 6 页')).toBeInTheDocument()
+  expect(screen.getByRole('heading', { name: /北/i })).toBeInTheDocument()
 })
 
 it('navigates the search flow for 北 to /cards/bei', async () => {
@@ -44,7 +45,8 @@ it('navigates the search flow for 北 to /cards/bei', async () => {
   await user.click(screen.getByRole('button', { name: /打开这个字卡/i }))
 
   expect(screen.getByTestId('location')).toHaveTextContent('/cards/bei')
-  expect(screen.getByRole('heading', { name: /学习页/i })).toBeInTheDocument()
+  expect(screen.getByText('第 1 / 6 页')).toBeInTheDocument()
+  expect(screen.getByRole('heading', { name: /北/i })).toBeInTheDocument()
 })
 
 it('disables blank search and clears the miss message on input change', async () => {
