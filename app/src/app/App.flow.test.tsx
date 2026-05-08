@@ -33,6 +33,11 @@ it('lets a parent finish the daily card and then see it on the profile page', as
 
   expect(screen.getByTestId('location')).toHaveTextContent(`/cards/${dailyCard?.slug}`)
 
+  await user.click(screen.getByRole('button', { name: '开始读这张卡' }))
+  await user.click(screen.getByRole('button', { name: '下一页' }))
+  await user.click(screen.getByRole('button', { name: '下一页' }))
+  await user.click(screen.getByRole('button', { name: '下一页' }))
+  await user.click(screen.getByRole('button', { name: '下一页' }))
   await user.click(screen.getByRole('button', { name: '今天这张读完了' }))
 
   expect(screen.getByTestId('location')).toHaveTextContent('/')
