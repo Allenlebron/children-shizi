@@ -4,7 +4,37 @@ import { findCardByQuery, getCardBySlug, getDailyCard, listCards } from './index
 describe('card registry', () => {
   it('exposes at least one curated card for the daily entry point', () => {
     expect(getDailyCard()).toBeDefined()
-    expect(listCards()).toHaveLength(1)
+    expect(listCards().length).toBeGreaterThanOrEqual(1)
+  })
+
+  it('keeps MVP cached characters available without generated search', () => {
+    const cachedCharacters = [
+      '北',
+      '水',
+      '火',
+      '木',
+      '人',
+      '口',
+      '山',
+      '日',
+      '月',
+      '大',
+      '小',
+      '上',
+      '下',
+      '中',
+      '天',
+      '地',
+      '白',
+      '云',
+      '手',
+      '心',
+    ]
+
+    expect(listCards()).toHaveLength(cachedCharacters.length)
+    expect(cachedCharacters.map((character) => findCardByQuery(character)?.character)).toEqual(
+      cachedCharacters,
+    )
   })
 
   it('finds the seeded card by a normalized slug query', () => {

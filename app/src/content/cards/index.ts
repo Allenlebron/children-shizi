@@ -1,8 +1,9 @@
-import { beiCard } from './bei'
+import type { HanziCard } from '../types'
+import { mvpCachedCards } from './mvp-cache'
 
-const cards = [beiCard]
+const cards = mvpCachedCards
 
-function cloneCard(card: (typeof cards)[number]) {
+function cloneCard(card: HanziCard) {
   return {
     ...card,
     words: [...card.words],
