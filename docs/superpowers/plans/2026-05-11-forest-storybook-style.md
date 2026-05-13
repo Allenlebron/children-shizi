@@ -121,3 +121,35 @@ Add page entry, story page, cloud, leaf, card reveal, button, and SVG stroke dra
 Run: `npm run lint`, `npm test`, and `npm run build`.
 
 Expected: lint passes, all tests pass, and the production build succeeds.
+
+### Task 6: MVP Common Stroke Data Pack
+
+**Files:**
+- Modify: `app/src/features/card/stroke-order-data.ts`
+- Modify: `app/src/features/card/StrokeOrderAnimation.test.tsx`
+- Create: `docs/third-party/hanzi-writer-data.md`
+
+- [x] **Step 1: Add failing data coverage test**
+
+Require the local stroke data registry to include the MVP common characters:
+`北、水、火、木、人、口、山、日、月、大、小、上、下、中、天、地、白、云、手、心`.
+
+- [x] **Step 2: Verify RED**
+
+Run: `npm test -- src/features/card/StrokeOrderAnimation.test.tsx`
+
+Expected: FAIL because the registry only includes `北`.
+
+- [x] **Step 3: Generate the local subset**
+
+Pull the 20-character subset from `hanzi-writer-data@2.0.1` and keep it local so the app does not need to bundle the full 32MB data package.
+
+- [x] **Step 4: Add source notice**
+
+Document that the local subset is derived from `hanzi-writer-data` and licensed under the Arphic Public License.
+
+- [x] **Step 5: Verify**
+
+Run: `npm run lint`, `npm test`, and `VITE_HANZI_API_BASE_URL='https://family-generated-search-api.myzwilpan.workers.dev' npm run build`.
+
+Expected: lint passes, all tests pass, and the production build succeeds.

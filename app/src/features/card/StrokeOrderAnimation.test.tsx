@@ -1,6 +1,38 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { StrokeOrderAnimation } from './StrokeOrderAnimation'
+import { getStrokeOrder, supportedStrokeOrderCharacters } from './stroke-order-data'
+
+const mvpStrokeOrderCharacters = [
+  '北',
+  '水',
+  '火',
+  '木',
+  '人',
+  '口',
+  '山',
+  '日',
+  '月',
+  '大',
+  '小',
+  '上',
+  '下',
+  '中',
+  '天',
+  '地',
+  '白',
+  '云',
+  '手',
+  '心',
+]
+
+it('includes local stroke order data for the MVP common characters', () => {
+  expect(supportedStrokeOrderCharacters).toEqual(expect.arrayContaining(mvpStrokeOrderCharacters))
+
+  for (const character of mvpStrokeOrderCharacters) {
+    expect(getStrokeOrder(character)?.strokes.length).toBeGreaterThan(0)
+  }
+})
 
 it('renders animated stroke order data for a supported character', () => {
   const { container } = render(<StrokeOrderAnimation character="北" />)
@@ -22,7 +54,7 @@ it('lets families replay the stroke animation', async () => {
 })
 
 it('shows a gentle fallback when stroke data is not available yet', () => {
-  render(<StrokeOrderAnimation character="木" />)
+  render(<StrokeOrderAnimation character="龘" />)
 
   expect(screen.getByText('笔顺动画')).toBeInTheDocument()
   expect(screen.getByText('这个字的笔顺动画还在准备中。')).toBeInTheDocument()

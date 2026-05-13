@@ -34,4 +34,4 @@ Use **A. 森林探险绘本** as the primary visual language.
 - No achievement system, login, or backend progress sync yet.
 - No audio or generation behavior changes.
 - No routing or data model changes.
-- No full hanzi stroke-order database yet; the MVP uses a small local data registry that can grow per curated card.
+- No full hanzi stroke-order database yet; the MVP uses a small local data registry for common validation characters and can grow per curated card.
