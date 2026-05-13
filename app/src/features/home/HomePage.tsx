@@ -69,20 +69,33 @@ export function HomePage() {
   }
 
   return (
-    <section className="hero-stack">
-      <article className="hero-card">
-        <p className="eyebrow">今天的故事字</p>
-        <h1>{dailyCard.character}</h1>
-        <p>{dailyCard.heroLine}</p>
+    <section className="hero-stack home-forest">
+      <article className="hero-card hero-card-daily">
+        <span className="storybook-blob storybook-blob-one" aria-hidden="true" />
+        <span className="storybook-blob storybook-blob-two" aria-hidden="true" />
+        <p className="eyebrow">森林识字队 · 今天的故事字</p>
+        <div className="mission-row" aria-hidden="true">
+          <span>今日小任务</span>
+          <span>约 5 分钟</span>
+        </div>
+        <h1 className="hero-character">{dailyCard.character}</h1>
+        <p className="hero-line">{dailyCard.heroLine}</p>
+        <p className="home-helper">跟着故事看画面、听一听、说一说，慢慢认识这个字。</p>
         <button type="button" onClick={() => navigate(`/cards/${dailyCard.slug}`)}>
           开始今天这张卡
         </button>
       </article>
 
-      <form className="panel-card" onSubmit={openQuery}>
-        <label htmlFor="card-query">搜一个字</label>
+      <form className="panel-card search-card" onSubmit={openQuery}>
+        <div className="section-header-row">
+          <label htmlFor="card-query">搜一个字</label>
+          <span className="soft-badge" aria-hidden="true">
+            找新树叶
+          </span>
+        </div>
         <input
           id="card-query"
+          placeholder="比如：水、火、木"
           value={query}
           onChange={(event) => {
             setQuery(event.target.value)

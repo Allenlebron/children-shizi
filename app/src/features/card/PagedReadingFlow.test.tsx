@@ -101,6 +101,8 @@ it('starts on the scene step and advances through all six reading pages', async 
   await user.click(screen.getByRole('button', { name: '下一页' }))
   expect(screen.getByText('第 3 / 6 页')).toBeInTheDocument()
   expect(screen.getByText('bei')).toBeInTheDocument()
+  expect(screen.getByText('北 · 5 笔')).toBeInTheDocument()
+  expect(screen.getByRole('img', { name: '北 的笔顺动画' })).toBeInTheDocument()
   expect(screen.getByText('先和孩子一起看画面，再说“像不像一个人转过去了”。')).toBeInTheDocument()
 
   await user.click(screen.getByRole('button', { name: '下一页' }))

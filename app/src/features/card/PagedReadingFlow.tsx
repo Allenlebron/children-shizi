@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import type { CardDocument } from '../../content/types'
 import { speak, supportsSpeechSynthesis } from '../../lib/audio/speak'
 import { markCompleted, readProgress, toggleFavorite } from '../../lib/progress/store'
+import { StrokeOrderAnimation } from './StrokeOrderAnimation'
 
 type ReadingStepKey = 'scene' | 'story' | 'character' | 'language' | 'activity' | 'finish'
 
@@ -18,6 +19,15 @@ const steps: Array<{ key: ReadingStepKey; label: string }> = [
   { key: 'activity', label: '互动一下' },
   { key: 'finish', label: '完成' },
 ]
+
+const stepHelpers: Record<ReadingStepKey, string> = {
+  scene: '先像看绘本一样看一看画面。',
+  story: '家长可以读，也可以让孩子听。',
+  character: '把大大的字看清楚，再说出来。',
+  language: '用词和句子把这个字带进生活。',
+  activity: '动一动、找一找，让孩子参与进来。',
+  finish: '收一片小树叶，今天完成了。',
+}
 
 function getSafeList(items: string[], fallback: string) {
   return items.length > 0 ? items : [fallback]
@@ -61,9 +71,19 @@ export function PagedReadingFlow({ document }: PagedReadingFlowProps) {
   return (
     <article className="paged-reading" aria-label={`${card.character} 的绘本识字流程`}>
       <header className="reading-topbar">
-        <p className="reading-progress-copy">
-          第 {stepIndex + 1} / {steps.length} 页
-        </p>
+        <div className="reading-progress-header">
+          <p className="reading-progress-copy">
+            第 {stepIndex + 1} / {steps.length} 页
+          </p>
+          <div className="reading-leaf-row" aria-hidden="true">
+            {steps.map((step, index) => (
+              <span
+                className={index <= stepIndex ? 'reading-leaf is-active' : 'reading-leaf'}
+                key={step.key}
+              />
+            ))}
+          </div>
+        </div>
         <div
           className="reading-progress-track"
           aria-label={`阅读进度 ${stepIndex + 1} / ${steps.length}`}
@@ -71,9 +91,12 @@ export function PagedReadingFlow({ document }: PagedReadingFlowProps) {
           <span style={{ width: `${((stepIndex + 1) / steps.length) * 100}%` }} />
         </div>
         <p className="reading-step-label">{currentStep.label}</p>
+        <p className="reading-step-helper">{stepHelpers[currentStep.key]}</p>
       </header>
 
-      <section className="reading-page-card">
+      <section className={`reading-page-card reading-page-${currentStep.key}`} key={currentStep.key}>
+        <span className="storybook-blob reading-blob-one" aria-hidden="true" />
+        <span className="storybook-blob reading-blob-two" aria-hidden="true" />
         {currentStep.key === 'scene' ? (
           <>
             <p className="card-section-label">故事画面</p>
@@ -115,6 +138,7 @@ export function PagedReadingFlow({ document }: PagedReadingFlowProps) {
             <p className="card-section-label">认这个字</p>
             <h1 className="reading-character reading-character-large">{card.character}</h1>
             <p className="reading-pinyin">{card.pinyin}</p>
+            <StrokeOrderAnimation character={card.character} />
             <div className="reading-parent-note">
               <p>{card.parentPrompt || '先和孩子一起看画面，再慢慢说出这个字。'}</p>
             </div>

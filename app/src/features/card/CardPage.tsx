@@ -8,36 +8,26 @@ import { PagedReadingFlow } from './PagedReadingFlow'
 export function CardPage() {
   const navigate = useNavigate()
   const { cardId = '' } = useParams()
-  const initialCurated = getCardBySlug(cardId)
-  const [document, setDocument] = useState<CardDocument | null>(() =>
-    initialCurated
-      ? {
-          cardId: initialCurated.slug,
-          access: 'curated',
-          card: initialCurated,
-        }
-      : null,
-  )
-  const [isLoading, setIsLoading] = useState(!initialCurated)
+  const curatedCard = getCardBySlug(cardId)
+  const curatedDocument: CardDocument | null = curatedCard
+    ? {
+        cardId: curatedCard.slug,
+        access: 'curated',
+        card: curatedCard,
+      }
+    : null
+  const [loadedDocument, setLoadedDocument] = useState<CardDocument | null>(null)
+  const [settledCardId, setSettledCardId] = useState<string | null>(curatedCard ? cardId : null)
+  const document =
+    curatedDocument ?? (loadedDocument?.cardId === cardId ? loadedDocument : null)
+  const isLoading = !curatedDocument && settledCardId !== cardId
 
   useEffect(() => {
-    let cancelled = false
-
-    const curated = getCardBySlug(cardId)
-    if (curated) {
-      setDocument({
-        cardId: curated.slug,
-        access: 'curated',
-        card: curated,
-      })
-      setIsLoading(false)
-      return () => {
-        cancelled = true
-      }
+    if (curatedCard) {
+      return
     }
 
-    setIsLoading(true)
-    setDocument(null)
+    let cancelled = false
 
     loadCardDocument(cardId)
       .then((nextDocument) => {
@@ -45,18 +35,22 @@ export function CardPage() {
           return
         }
 
-        setDocument(nextDocument)
+        setLoadedDocument(nextDocument)
+        setSettledCardId(cardId)
       })
-      .finally(() => {
-        if (!cancelled) {
-          setIsLoading(false)
+      .catch(() => {
+        if (cancelled) {
+          return
         }
+
+        setLoadedDocument(null)
+        setSettledCardId(cardId)
       })
 
     return () => {
       cancelled = true
     }
-  }, [cardId])
+  }, [cardId, curatedCard])
 
   if (isLoading) {
     return (
