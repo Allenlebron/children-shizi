@@ -31,7 +31,7 @@ it('renders the library placeholder through the shell at /cards', () => {
 it('renders the card placeholder through the shell at /cards/bei', () => {
   renderApp('/cards/bei')
 
-  expect(screen.getByText('第 1 / 6 页')).toBeInTheDocument()
+  expect(screen.getByText('1 / 6 · 看画面')).toBeInTheDocument()
   expect(screen.getByRole('heading', { name: /北/i })).toBeInTheDocument()
   expect(screen.getByRole('navigation', { name: /主导航/i })).toBeInTheDocument()
   expect(screen.getByRole('link', { name: /字卡/i })).toHaveAttribute('aria-current', 'page')

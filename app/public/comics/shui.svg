@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 420" role="img" aria-labelledby="title desc">
+  <title id="title">小水滴从云朵落进小河</title>
+  <desc id="desc">蓝色小水滴从白云落下，流进森林里的小河。</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0" stop-color="#d7f8ff"/>
+      <stop offset="1" stop-color="#effbdc"/>
+    </linearGradient>
+    <linearGradient id="river" x1="0" x2="1">
+      <stop offset="0" stop-color="#85d9ff"/>
+      <stop offset="1" stop-color="#50b7e8"/>
+    </linearGradient>
+  </defs>
+  <rect width="720" height="420" rx="48" fill="url(#bg)"/>
+  <circle cx="616" cy="78" r="42" fill="#ffe889"/>
+  <g fill="#fffef8">
+    <ellipse cx="168" cy="86" rx="58" ry="30"/>
+    <ellipse cx="216" cy="78" rx="48" ry="34"/>
+    <ellipse cx="258" cy="92" rx="64" ry="28"/>
+  </g>
+  <path d="M0 306c92-12 152-10 232 12 77 21 128 22 213-7 83-28 168-29 275 16v93H0z" fill="#83c66e"/>
+  <path d="M0 350c96-52 189-35 283-18 113 21 229 30 437-39v127H0z" fill="url(#river)"/>
+  <path d="M65 357c93-26 153-16 223 1 81 19 166 19 290-25" fill="none" stroke="#d9fbff" stroke-width="8" stroke-linecap="round" opacity=".84"/>
+  <g transform="translate(324 126)">
+    <path d="M45 0c27 39 45 62 45 91 0 28-20 51-45 51S0 119 0 91C0 62 18 39 45 0z" fill="#46bde9"/>
+    <path d="M29 52c-9 17-8 35 4 48" fill="none" stroke="#d9fbff" stroke-width="9" stroke-linecap="round"/>
+    <circle cx="33" cy="81" r="5" fill="#14526c"/>
+    <circle cx="57" cy="81" r="5" fill="#14526c"/>
+    <path d="M34 103q12 10 24 0" fill="none" stroke="#14526c" stroke-width="5" stroke-linecap="round"/>
+  </g>
+  <g transform="translate(512 210)">
+    <path d="M58 0 10 98h96z" fill="#4a9f63"/>
+    <path d="M58 42 24 116h70z" fill="#2f7c4b"/>
+    <rect x="52" y="106" width="12" height="42" rx="5" fill="#8f6740"/>
+  </g>
+  <g transform="translate(88 218)">
+    <ellipse cx="60" cy="92" rx="42" ry="10" fill="#6fae67"/>
+    <rect x="46" y="28" width="28" height="70" rx="14" fill="#f8dca8"/>
+    <circle cx="60" cy="22" r="22" fill="#ffd7aa"/>
+    <path d="M40 31c6-27 48-32 51 2-18-9-35-9-51-2z" fill="#46352d"/>
+    <path d="M26 50c26-20 45-24 68-15" fill="none" stroke="#f6a24b" stroke-width="18" stroke-linecap="round"/>
+    <path d="M36 78c-10 18-12 32-8 47" stroke="#455737" stroke-width="12" stroke-linecap="round"/>
+    <path d="M83 78c11 18 13 34 8 47" stroke="#455737" stroke-width="12" stroke-linecap="round"/>
+  </g>
+</svg>

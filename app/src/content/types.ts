@@ -1,3 +1,10 @@
+export interface HanziComicScene {
+  imageSrc: string
+  alt: string
+  caption: string
+  questions: string[]
+}
+
 export interface HanziCard {
   slug: string
   character: string
@@ -6,6 +13,7 @@ export interface HanziCard {
   estimatedMinutes: number
   heroLine: string
   storyScene: string
+  comic?: HanziComicScene
   storyText: string
   parentPrompt: string
   words: string[]

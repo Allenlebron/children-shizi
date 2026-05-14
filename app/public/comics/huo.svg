@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 420" role="img" aria-labelledby="title desc">
+  <title id="title">小朋友远远看暖暖的小火苗</title>
+  <desc id="desc">营地旁的小火苗发出暖光，小朋友在安全距离外观察。</desc>
+  <defs>
+    <radialGradient id="glow" cx=".58" cy=".55" r=".56">
+      <stop offset="0" stop-color="#ffe789"/>
+      <stop offset=".55" stop-color="#fff2b2"/>
+      <stop offset="1" stop-color="#d9f4ff"/>
+    </radialGradient>
+  </defs>
+  <rect width="720" height="420" rx="48" fill="url(#glow)"/>
+  <path d="M0 302c115-30 191-18 287 1 122 24 220 16 433-22v139H0z" fill="#8ccc75"/>
+  <g transform="translate(420 150)">
+    <ellipse cx="82" cy="180" rx="78" ry="16" fill="#8fb66e" opacity=".55"/>
+    <path d="M55 150 16 190" stroke="#795336" stroke-width="18" stroke-linecap="round"/>
+    <path d="M114 150 154 190" stroke="#795336" stroke-width="18" stroke-linecap="round"/>
+    <path d="M82 0c22 33 10 55 4 77 29-21 45 11 45 42 0 41-28 70-66 70S0 160 0 119c0-34 18-57 37-80 2 22 12 36 25 43C53 51 58 24 82 0z" fill="#f2653d"/>
+    <path d="M81 56c16 23 8 39 4 54 18-13 29 8 29 27 0 25-18 43-42 43s-41-18-41-43c0-21 12-36 24-50 1 14 8 23 16 27-6-19-3-37 10-58z" fill="#ffd34f"/>
+  </g>
+  <g transform="translate(144 176)">
+    <ellipse cx="66" cy="160" rx="56" ry="12" fill="#8fb66e" opacity=".6"/>
+    <path d="M36 74c-17 25-17 63 0 89h58c16-26 16-66 0-89z" fill="#71b86a"/>
+    <circle cx="65" cy="42" r="31" fill="#ffd7aa"/>
+    <path d="M36 35c8-30 58-36 68 0-24-10-45-10-68 0z" fill="#45322d"/>
+    <circle cx="53" cy="43" r="4" fill="#332923"/>
+    <circle cx="77" cy="43" r="4" fill="#332923"/>
+    <path d="M53 62q12 8 24 0" fill="none" stroke="#6e3e32" stroke-width="5" stroke-linecap="round"/>
+    <path d="M26 96c-22 16-32 37-26 60" fill="none" stroke="#ffd7aa" stroke-width="16" stroke-linecap="round"/>
+    <path d="M103 96c22 16 32 37 26 60" fill="none" stroke="#ffd7aa" stroke-width="16" stroke-linecap="round"/>
+    <path d="M43 163h17l-10 34" stroke="#45322b" stroke-width="14" stroke-linecap="round"/>
+    <path d="M87 163h17l8 34" stroke="#45322b" stroke-width="14" stroke-linecap="round"/>
+  </g>
+  <g fill="none" stroke="#ffb65c" stroke-linecap="round" stroke-width="7" opacity=".55">
+    <path d="M367 186c-33 12-61 12-91 0"/>
+    <path d="M370 224c-38 11-77 9-115-6"/>
+  </g>
+</svg>

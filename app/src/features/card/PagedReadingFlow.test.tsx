@@ -22,6 +22,12 @@ const curatedDocument: CardDocument = {
     estimatedMinutes: 5,
     heroLine: '今天用一个小故事认识“北”。',
     storyScene: '一个小朋友转过身，背朝前面站着。',
+    comic: {
+      imageSrc: '/comics/bei.svg',
+      alt: '小朋友在雪地里找北方',
+      caption: '小朋友穿着厚厚的衣服，站在北风吹来的雪地里。',
+      questions: ['你看到哪些地方让人觉得冷？', '北风吹来的时候，小朋友可以怎么保护自己？'],
+    },
     storyText:
       '大家慢慢就把这种“转过身、背朝前面”的感觉和“北”连在了一起，所以后来一说北，很多人就会想到方向。',
     parentPrompt: '先和孩子一起看画面，再说“像不像一个人转过去了”。',
@@ -89,33 +95,36 @@ it('starts on the scene step and advances through all six reading pages', async 
 
   renderFlow()
 
-  expect(screen.getByText('第 1 / 6 页')).toBeInTheDocument()
+  expect(screen.getByText('1 / 6 · 看画面')).toBeInTheDocument()
+  expect(screen.queryByText('先像看绘本一样看一看画面。')).not.toBeInTheDocument()
   expect(screen.getByRole('heading', { name: '北' })).toBeInTheDocument()
-  expect(screen.getByText('一个小朋友转过身，背朝前面站着。')).toBeInTheDocument()
+  expect(screen.getByRole('img', { name: '小朋友在雪地里找北方' })).toBeInTheDocument()
+  expect(screen.getByText('小朋友穿着厚厚的衣服，站在北风吹来的雪地里。')).toBeInTheDocument()
+  expect(screen.getByText('你看到哪些地方让人觉得冷？')).toBeInTheDocument()
   expect(screen.queryByRole('button', { name: '上一步' })).not.toBeInTheDocument()
 
   await user.click(screen.getByRole('button', { name: '开始读这张卡' }))
-  expect(screen.getByText('第 2 / 6 页')).toBeInTheDocument()
+  expect(screen.getByText('2 / 6 · 听故事')).toBeInTheDocument()
   expect(screen.getByRole('heading', { name: '听 / 讲故事' })).toBeInTheDocument()
 
   await user.click(screen.getByRole('button', { name: '下一页' }))
-  expect(screen.getByText('第 3 / 6 页')).toBeInTheDocument()
+  expect(screen.getByText('3 / 6 · 认这个字')).toBeInTheDocument()
   expect(screen.getByText('bei')).toBeInTheDocument()
   expect(screen.getByText('北 · 5 笔')).toBeInTheDocument()
   expect(screen.getByRole('img', { name: '北 的笔顺动画' })).toBeInTheDocument()
   expect(screen.getByText('先和孩子一起看画面，再说“像不像一个人转过去了”。')).toBeInTheDocument()
 
   await user.click(screen.getByRole('button', { name: '下一页' }))
-  expect(screen.getByText('第 4 / 6 页')).toBeInTheDocument()
+  expect(screen.getByText('4 / 6 · 读词句')).toBeInTheDocument()
   expect(screen.getByText('北边')).toBeInTheDocument()
   expect(screen.getByText('北风吹来了。')).toBeInTheDocument()
 
   await user.click(screen.getByRole('button', { name: '下一页' }))
-  expect(screen.getByText('第 5 / 6 页')).toBeInTheDocument()
+  expect(screen.getByText('5 / 6 · 互动一下')).toBeInTheDocument()
   expect(screen.getByText('我们站起来转一转，找一找哪边是北。')).toBeInTheDocument()
 
   await user.click(screen.getByRole('button', { name: '下一页' }))
-  expect(screen.getByText('第 6 / 6 页')).toBeInTheDocument()
+  expect(screen.getByText('6 / 6 · 完成')).toBeInTheDocument()
   expect(screen.getByRole('heading', { name: '今天这张读完了' })).toBeInTheDocument()
 })
 
@@ -130,7 +139,7 @@ it('lets the family go back to the previous reading page', async () => {
   await user.click(screen.getByRole('button', { name: '上一步' }))
 
   expect(screen.getByRole('heading', { name: '北' })).toBeInTheDocument()
-  expect(screen.getByText('第 1 / 6 页')).toBeInTheDocument()
+  expect(screen.getByText('1 / 6 · 看画面')).toBeInTheDocument()
 })
 
 it('speaks the story aloud from the story page', async () => {
@@ -166,6 +175,44 @@ it('speaks the story aloud from the story page', async () => {
   expect(speak.mock.calls[0]?.[0]).toMatchObject({ text: curatedDocument.card.storyText })
 })
 
+it('speaks words and sentences from the language page', async () => {
+  const user = userEvent.setup()
+  const speak = vi.fn()
+
+  class MockSpeechSynthesisUtterance {
+    text: string
+
+    constructor(text: string) {
+      this.text = text
+    }
+  }
+
+  Object.defineProperty(window, 'speechSynthesis', {
+    configurable: true,
+    value: {
+      cancel: vi.fn(),
+      speak,
+    },
+  })
+  Object.defineProperty(window, 'SpeechSynthesisUtterance', {
+    configurable: true,
+    value: MockSpeechSynthesisUtterance,
+  })
+
+  renderFlow()
+
+  await user.click(screen.getByRole('button', { name: '开始读这张卡' }))
+  await user.click(screen.getByRole('button', { name: '下一页' }))
+  await user.click(screen.getByRole('button', { name: '下一页' }))
+
+  expect(screen.queryByText('听')).not.toBeInTheDocument()
+  await user.click(screen.getByRole('button', { name: '点读 北边' }))
+  expect(speak).toHaveBeenLastCalledWith(expect.objectContaining({ text: '北边' }))
+
+  await user.click(screen.getByRole('button', { name: '点读 北风吹来了。' }))
+  expect(speak).toHaveBeenLastCalledWith(expect.objectContaining({ text: '北风吹来了。' }))
+})
+
 it('shows a gentle fallback when story audio is unavailable', async () => {
   const user = userEvent.setup()
 
@@ -185,6 +232,30 @@ it('shows a gentle fallback when story audio is unavailable', async () => {
   expect(screen.getByRole('button', { name: '听这个故事' })).toBeDisabled()
   expect(
     screen.getByText('这个浏览器暂时不能播放故事，可以直接读给孩子听。'),
+  ).toBeInTheDocument()
+})
+
+it('disables word and sentence read-aloud when audio is unavailable', async () => {
+  const user = userEvent.setup()
+
+  Object.defineProperty(window, 'speechSynthesis', {
+    configurable: true,
+    value: undefined,
+  })
+  Object.defineProperty(window, 'SpeechSynthesisUtterance', {
+    configurable: true,
+    value: undefined,
+  })
+
+  renderFlow()
+
+  await user.click(screen.getByRole('button', { name: '开始读这张卡' }))
+  await user.click(screen.getByRole('button', { name: '下一页' }))
+  await user.click(screen.getByRole('button', { name: '下一页' }))
+
+  expect(screen.getByRole('button', { name: '点读 北边' })).toBeDisabled()
+  expect(
+    screen.getByText('这个浏览器暂时不能点读词句，可以家长读给孩子听。'),
   ).toBeInTheDocument()
 })
 

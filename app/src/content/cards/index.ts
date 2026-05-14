@@ -6,6 +6,7 @@ const cards = mvpCachedCards
 function cloneCard(card: HanziCard) {
   return {
     ...card,
+    comic: card.comic ? { ...card.comic, questions: [...card.comic.questions] } : undefined,
     words: [...card.words],
     sentences: [...card.sentences],
   }

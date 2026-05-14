@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 420" role="img" aria-labelledby="title desc">
+  <title id="title">小朋友抱着树旁边的积木</title>
+  <desc id="desc">一棵大树站在草地上，小朋友抱着积木，旁边有木头小屋。</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0" stop-color="#dff8ea"/>
+      <stop offset="1" stop-color="#fff8df"/>
+    </linearGradient>
+  </defs>
+  <rect width="720" height="420" rx="48" fill="url(#bg)"/>
+  <circle cx="92" cy="76" r="38" fill="#ffe789"/>
+  <path d="M0 306c91-32 171-28 259-5 105 27 219 28 461-19v138H0z" fill="#8fcd75"/>
+  <g transform="translate(408 82)">
+    <rect x="82" y="132" width="34" height="198" rx="14" fill="#8f623d"/>
+    <circle cx="67" cy="122" r="62" fill="#64b96a"/>
+    <circle cx="132" cy="118" r="68" fill="#4a9f63"/>
+    <circle cx="98" cy="66" r="70" fill="#78c978"/>
+    <path d="M96 154c-21 38-41 60-71 82" fill="none" stroke="#7b5639" stroke-width="9" stroke-linecap="round"/>
+    <path d="M102 149c32 29 57 51 76 82" fill="none" stroke="#7b5639" stroke-width="9" stroke-linecap="round"/>
+  </g>
+  <g transform="translate(70 226)">
+    <path d="M0 76 80 0l80 76v88H0z" fill="#c9894e"/>
+    <path d="M0 76 80 0l80 76z" fill="#9d653e"/>
+    <rect x="61" y="92" width="38" height="72" rx="8" fill="#fff1c4"/>
+    <rect x="18" y="92" width="34" height="30" rx="6" fill="#ffe789"/>
+    <rect x="110" y="92" width="34" height="30" rx="6" fill="#ffe789"/>
+  </g>
+  <g transform="translate(278 176)">
+    <ellipse cx="62" cy="162" rx="54" ry="12" fill="#7bad65" opacity=".62"/>
+    <path d="M34 75c-17 27-17 65 0 89h58c16-24 16-62 0-89z" fill="#ffb65c"/>
+    <circle cx="63" cy="42" r="30" fill="#ffd7aa"/>
+    <path d="M35 38c9-33 56-34 66 0-24-9-43-8-66 0z" fill="#44312b"/>
+    <circle cx="52" cy="44" r="4" fill="#332923"/>
+    <circle cx="75" cy="44" r="4" fill="#332923"/>
+    <path d="M52 62q12 8 24 0" fill="none" stroke="#6e3e32" stroke-width="5" stroke-linecap="round"/>
+    <rect x="8" y="96" width="42" height="42" rx="7" fill="#f6d15d" stroke="#9d653e" stroke-width="5"/>
+    <rect x="55" y="106" width="42" height="42" rx="7" fill="#8bd4e8" stroke="#4b8ea1" stroke-width="5"/>
+    <path d="M28 102c-20 16-25 34-20 51" fill="none" stroke="#ffd7aa" stroke-width="15" stroke-linecap="round"/>
+    <path d="M99 100c20 17 26 34 18 52" fill="none" stroke="#ffd7aa" stroke-width="15" stroke-linecap="round"/>
+    <path d="M41 164h17l-9 34" stroke="#45322b" stroke-width="14" stroke-linecap="round"/>
+    <path d="M84 164h17l8 34" stroke="#45322b" stroke-width="14" stroke-linecap="round"/>
+  </g>
+</svg>

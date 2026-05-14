@@ -20,15 +20,6 @@ const steps: Array<{ key: ReadingStepKey; label: string }> = [
   { key: 'finish', label: '完成' },
 ]
 
-const stepHelpers: Record<ReadingStepKey, string> = {
-  scene: '先像看绘本一样看一看画面。',
-  story: '家长可以读，也可以让孩子听。',
-  character: '把大大的字看清楚，再说出来。',
-  language: '用词和句子把这个字带进生活。',
-  activity: '动一动、找一找，让孩子参与进来。',
-  finish: '收一片小树叶，今天完成了。',
-}
-
 function getSafeList(items: string[], fallback: string) {
   return items.length > 0 ? items : [fallback]
 }
@@ -68,30 +59,19 @@ export function PagedReadingFlow({ document }: PagedReadingFlowProps) {
     setIsFavorite((currentFavorite) => !currentFavorite)
   }
 
+  function playText(text: string) {
+    speak(text)
+  }
+
   return (
     <article className="paged-reading" aria-label={`${card.character} 的绘本识字流程`}>
       <header className="reading-topbar">
-        <div className="reading-progress-header">
-          <p className="reading-progress-copy">
-            第 {stepIndex + 1} / {steps.length} 页
-          </p>
-          <div className="reading-leaf-row" aria-hidden="true">
-            {steps.map((step, index) => (
-              <span
-                className={index <= stepIndex ? 'reading-leaf is-active' : 'reading-leaf'}
-                key={step.key}
-              />
-            ))}
-          </div>
-        </div>
-        <div
-          className="reading-progress-track"
-          aria-label={`阅读进度 ${stepIndex + 1} / ${steps.length}`}
+        <p
+          className="reading-progress-pill"
+          aria-label={`阅读进度 ${stepIndex + 1} / ${steps.length}，${currentStep.label}`}
         >
-          <span style={{ width: `${((stepIndex + 1) / steps.length) * 100}%` }} />
-        </div>
-        <p className="reading-step-label">{currentStep.label}</p>
-        <p className="reading-step-helper">{stepHelpers[currentStep.key]}</p>
+          {stepIndex + 1} / {steps.length} · {currentStep.label}
+        </p>
       </header>
 
       <section className={`reading-page-card reading-page-${currentStep.key}`} key={currentStep.key}>
@@ -100,9 +80,23 @@ export function PagedReadingFlow({ document }: PagedReadingFlowProps) {
         {currentStep.key === 'scene' ? (
           <>
             <p className="card-section-label">故事画面</p>
-            <div className="reading-scene-box">
-              <p>{card.storyScene || '我们先看一看这幅小画面。'}</p>
-            </div>
+            {card.comic ? (
+              <>
+                <figure className="reading-comic-frame">
+                  <img src={card.comic.imageSrc} alt={card.comic.alt} />
+                  <figcaption>{card.comic.caption}</figcaption>
+                </figure>
+                <div className="reading-comic-questions" aria-label="看图小问题">
+                  {card.comic.questions.map((question) => (
+                    <p key={question}>{question}</p>
+                  ))}
+                </div>
+              </>
+            ) : (
+              <div className="reading-scene-box">
+                <p>{card.storyScene || '我们先看一看这幅小画面。'}</p>
+              </div>
+            )}
             <h1 className="reading-character">{card.character}</h1>
             <p className="reading-hero-line">{card.heroLine || `今天认识“${card.character}”。`}</p>
           </>
@@ -152,7 +146,18 @@ export function PagedReadingFlow({ document }: PagedReadingFlowProps) {
               <p className="card-mini-heading">词</p>
               <ul className="reading-pill-list">
                 {getSafeList(card.words, `关于“${card.character}”的词`).map((word) => (
-                  <li key={word}>{word}</li>
+                  <li key={word}>
+                    <button
+                      className="reading-read-button reading-word-button"
+                      type="button"
+                      disabled={!canPlayStory}
+                      aria-label={`点读 ${word}`}
+                      aria-describedby={canPlayStory ? undefined : 'language-audio-hint'}
+                      onClick={() => playText(word)}
+                    >
+                      <span>{word}</span>
+                    </button>
+                  </li>
                 ))}
               </ul>
             </div>
@@ -160,10 +165,26 @@ export function PagedReadingFlow({ document }: PagedReadingFlowProps) {
               <p className="card-mini-heading">句子</p>
               <ul className="card-bullet-list">
                 {getSafeList(card.sentences, '这一段我们先慢慢看图说一说。').map((sentence) => (
-                  <li key={sentence}>{sentence}</li>
+                  <li key={sentence}>
+                    <button
+                      className="reading-read-button reading-sentence-button"
+                      type="button"
+                      disabled={!canPlayStory}
+                      aria-label={`点读 ${sentence}`}
+                      aria-describedby={canPlayStory ? undefined : 'language-audio-hint'}
+                      onClick={() => playText(sentence)}
+                    >
+                      <span>{sentence}</span>
+                    </button>
+                  </li>
                 ))}
               </ul>
             </div>
+            {canPlayStory ? null : (
+              <p className="card-action-hint" id="language-audio-hint">
+                这个浏览器暂时不能点读词句，可以家长读给孩子听。
+              </p>
+            )}
           </>
         ) : null}
 

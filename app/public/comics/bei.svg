@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 420" role="img" aria-labelledby="title desc">
+  <title id="title">小朋友在雪地里找北方</title>
+  <desc id="desc">一个穿红衣服的小朋友站在雪地和松树之间，北风吹起雪花。</desc>
+  <defs>
+    <linearGradient id="sky" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0" stop-color="#c9f3ff"/>
+      <stop offset="1" stop-color="#fff8df"/>
+    </linearGradient>
+    <filter id="softShadow" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="10" stdDeviation="10" flood-color="#355d55" flood-opacity=".16"/>
+    </filter>
+  </defs>
+  <rect width="720" height="420" rx="48" fill="url(#sky)"/>
+  <circle cx="94" cy="76" r="34" fill="#fffef6"/>
+  <path d="M0 305c92-44 155-34 230-22 76 12 135 28 238 0 92-25 171-36 252 14v123H0z" fill="#f6fbff"/>
+  <path d="M42 316c118-38 170 9 263-11 88-19 162-57 275-11" fill="none" stroke="#c9e7ef" stroke-width="6" stroke-linecap="round"/>
+  <g fill="#dff4f6" opacity=".9">
+    <circle cx="132" cy="132" r="5"/>
+    <circle cx="188" cy="98" r="4"/>
+    <circle cx="612" cy="116" r="5"/>
+    <circle cx="560" cy="166" r="4"/>
+    <circle cx="86" cy="214" r="4"/>
+  </g>
+  <g transform="translate(500 146)">
+    <path d="M62 0 9 108h106z" fill="#3f8e59"/>
+    <path d="M62 50 24 129h78z" fill="#2f7449"/>
+    <rect x="55" y="116" width="14" height="52" rx="5" fill="#8d633f"/>
+  </g>
+  <g transform="translate(114 156)">
+    <path d="M58 0 11 94h96z" fill="#61b96d"/>
+    <path d="M58 44 24 116h72z" fill="#3f8e59"/>
+    <rect x="52" y="106" width="12" height="48" rx="5" fill="#8d633f"/>
+  </g>
+  <g filter="url(#softShadow)" transform="translate(305 166)">
+    <ellipse cx="55" cy="186" rx="54" ry="13" fill="#bed9da"/>
+    <path d="M28 83c-16 24-16 77 0 104h55c16-28 15-81 0-104z" fill="#f05f42"/>
+    <path d="M27 95c13 9 43 13 58 0l-8-22H35z" fill="#ffca68"/>
+    <circle cx="55" cy="52" r="32" fill="#ffd8aa"/>
+    <path d="M23 47c3-25 22-42 48-37 18 3 28 16 30 35-25-13-52-10-78 2z" fill="#413029"/>
+    <path d="M28 37c24-20 54-18 75 4-4-34-74-45-75-4z" fill="#e94843"/>
+    <path d="M42 62q13 10 26 0" fill="none" stroke="#6e3e32" stroke-width="5" stroke-linecap="round"/>
+    <circle cx="42" cy="51" r="4" fill="#3d302c"/>
+    <circle cx="71" cy="51" r="4" fill="#3d302c"/>
+    <path d="M18 113c-15 16-19 34-8 46" fill="none" stroke="#ffd8aa" stroke-width="16" stroke-linecap="round"/>
+    <path d="M91 111c18 14 24 31 14 46" fill="none" stroke="#ffd8aa" stroke-width="16" stroke-linecap="round"/>
+    <path d="M31 187h20l-11 36" stroke="#45322b" stroke-width="15" stroke-linecap="round" fill="none"/>
+    <path d="M77 187h19l8 34" stroke="#45322b" stroke-width="15" stroke-linecap="round" fill="none"/>
+  </g>
+  <g fill="none" stroke="#9fcae1" stroke-linecap="round" stroke-width="7" opacity=".9">
+    <path d="M230 112c-35 3-66 16-96 39"/>
+    <path d="M610 210c-45-9-86-4-123 17"/>
+    <path d="M250 90c-21 4-42 13-63 28"/>
+  </g>
+</svg>

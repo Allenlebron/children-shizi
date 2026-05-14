@@ -37,6 +37,12 @@ describe('card registry', () => {
     )
   })
 
+  it('adds comic scene metadata to the first MVP sample cards', () => {
+    expect(['北', '水', '火', '木'].map((character) => findCardByQuery(character)?.comic?.imageSrc)).toEqual(
+      ['/comics/bei.svg', '/comics/shui.svg', '/comics/huo.svg', '/comics/mu.svg'],
+    )
+  })
+
   it('finds the seeded card by a normalized slug query', () => {
     expect(findCardByQuery('  BEI  ')?.slug).toBe('bei')
   })
