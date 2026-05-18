@@ -615,6 +615,15 @@ button:disabled {
   box-shadow: 0 8px 18px rgba(75, 91, 45, 0.08);
 }
 
+.reading-read-button.is-speaking {
+  transform: translateY(-2px) scale(1.03) rotate(-0.4deg);
+  border-color: rgba(255, 170, 75, 0.68);
+  background:
+    radial-gradient(circle at 18% 20%, rgba(255, 237, 137, 0.86), transparent 34%),
+    linear-gradient(135deg, rgba(255, 249, 213, 0.96), rgba(220, 248, 207, 0.92));
+  box-shadow: 0 14px 24px rgba(255, 156, 67, 0.22);
+}
+
 .reading-footer {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);

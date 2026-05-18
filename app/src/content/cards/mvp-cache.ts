@@ -1,11 +1,111 @@
-import type { HanziCard } from '../types'
+import type { HanziCard, HanziComicScene } from '../types'
 import { beiCard } from './bei'
 
 type CachedCardInput = Omit<HanziCard, 'estimatedMinutes'>
 
+const comicScenes: Record<string, HanziComicScene> = {
+  ren: {
+    imageSrc: '/comics/ren.svg',
+    alt: '两个小朋友牵着手在森林小路上走',
+    caption: '你和我牵着手，一起往前走，我们都是人。',
+    questions: ['画面里有几个人？', '你想和谁一起牵手散步？'],
+  },
+  kou: {
+    imageSrc: '/comics/kou.svg',
+    alt: '小朋友张开嘴巴吹泡泡',
+    caption: '小嘴巴张开，说话、唱歌、吹出圆圆泡泡。',
+    questions: ['小朋友用口在做什么？', '你的口还可以做哪些事情？'],
+  },
+  shan: {
+    imageSrc: '/comics/shan.svg',
+    alt: '小兔子站在三座小山前',
+    caption: '三座小山一座高一座低，像在排队。',
+    questions: ['哪座山最高？', '你想爬到山上看什么？'],
+  },
+  ri: {
+    imageSrc: '/comics/ri.svg',
+    alt: '太阳从树梢后升起来',
+    caption: '太阳一出来，森林变得亮亮暖暖。',
+    questions: ['太阳在哪里？', '日光照到哪里了？'],
+  },
+  yue: {
+    imageSrc: '/comics/yue.svg',
+    alt: '弯弯月亮挂在夜空里',
+    caption: '弯弯的月亮像小船，慢慢挂在夜空。',
+    questions: ['月亮像什么？', '晚上你还看见了什么？'],
+  },
+  da: {
+    imageSrc: '/comics/da.svg',
+    alt: '小朋友张开双臂比大大的拥抱',
+    caption: '手臂张得很开，送出一个大大的拥抱。',
+    questions: ['小朋友的手臂张得大不大？', '家里什么东西是大的？'],
+  },
+  xiao: {
+    imageSrc: '/comics/xiao.svg',
+    alt: '一颗小豆子躲在叶子下面',
+    caption: '小豆子圆圆小小，躲在叶子下面。',
+    questions: ['小豆子藏在哪里？', '你能找一个小东西吗？'],
+  },
+  shang: {
+    imageSrc: '/comics/shang.svg',
+    alt: '小叶子被风吹到树枝上方',
+    caption: '风轻轻一吹，小叶子飞到树枝上面。',
+    questions: ['叶子飞到哪里了？', '你能把手举到上面吗？'],
+  },
+  xia: {
+    imageSrc: '/comics/xia.svg',
+    alt: '小雨点从云下面落下来',
+    caption: '雨点从云朵下面落下，给小草喝水。',
+    questions: ['雨点从哪里下来？', '雨点落到哪里了？'],
+  },
+  zhong: {
+    imageSrc: '/comics/zhong.svg',
+    alt: '小兔子站在三棵树中间',
+    caption: '三棵树排排站，小兔子站在中间。',
+    questions: ['小兔子站在第几棵树旁？', '你能指出中间的位置吗？'],
+  },
+  tian: {
+    imageSrc: '/comics/tian.svg',
+    alt: '蓝天上飘着白云和小鸟',
+    caption: '蓝蓝的天很高，白云和小鸟在上面。',
+    questions: ['天空是什么颜色？', '天上有哪些东西？'],
+  },
+  di: {
+    imageSrc: '/comics/di.svg',
+    alt: '小脚踩在草地和土地上',
+    caption: '小脚踩在地上，草和花都从地里长出来。',
+    questions: ['小脚踩在哪里？', '地上长出了什么？'],
+  },
+  bai: {
+    imageSrc: '/comics/bai.svg',
+    alt: '白云像棉花一样飘在蓝天上',
+    caption: '白云软软白白，像一团棉花糖。',
+    questions: ['画面里什么是白色的？', '你还见过哪些白色东西？'],
+  },
+  yun: {
+    imageSrc: '/comics/yun.svg',
+    alt: '几朵云像棉花糖一样飘过',
+    caption: '云朵排成小队，慢慢飘过天空。',
+    questions: ['云朵像什么形状？', '哪一朵云最大？'],
+  },
+  shou: {
+    imageSrc: '/comics/shou.svg',
+    alt: '小朋友伸出手接住落叶',
+    caption: '小手伸出来，轻轻接住一片落叶。',
+    questions: ['小手接住了什么？', '你的手今天做了什么？'],
+  },
+  xin: {
+    imageSrc: '/comics/xin.svg',
+    alt: '一颗爱心在小朋友口袋里发光',
+    caption: '爱心在口袋里发光，心里暖暖的。',
+    questions: ['爱心在哪里发光？', '什么事情会让你开心？'],
+  },
+}
+
 function createCachedCard(card: CachedCardInput): HanziCard {
   return {
     estimatedMinutes: 5,
+    comic: comicScenes[card.slug],
     ...card,
   }
 }

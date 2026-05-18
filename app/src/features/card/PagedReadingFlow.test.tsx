@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter, useLocation } from 'react-router-dom'
 import type { CardDocument } from '../../content/types'
@@ -84,6 +84,7 @@ function restoreWindowProperty(
 }
 
 afterEach(() => {
+  vi.useRealTimers()
   localStorage.clear()
   vi.restoreAllMocks()
   restoreWindowProperty('speechSynthesis', originalSpeechSynthesis)
@@ -211,6 +212,51 @@ it('speaks words and sentences from the language page', async () => {
 
   await user.click(screen.getByRole('button', { name: '点读 北风吹来了。' }))
   expect(speak).toHaveBeenLastCalledWith(expect.objectContaining({ text: '北风吹来了。' }))
+})
+
+it('highlights the tapped word while it is being read aloud', async () => {
+  const user = userEvent.setup()
+  const speak = vi.fn()
+
+  class MockSpeechSynthesisUtterance {
+    text: string
+
+    constructor(text: string) {
+      this.text = text
+    }
+  }
+
+  Object.defineProperty(window, 'speechSynthesis', {
+    configurable: true,
+    value: {
+      cancel: vi.fn(),
+      speak,
+    },
+  })
+  Object.defineProperty(window, 'SpeechSynthesisUtterance', {
+    configurable: true,
+    value: MockSpeechSynthesisUtterance,
+  })
+
+  renderFlow()
+
+  await user.click(screen.getByRole('button', { name: '开始读这张卡' }))
+  await user.click(screen.getByRole('button', { name: '下一页' }))
+  await user.click(screen.getByRole('button', { name: '下一页' }))
+
+  const wordButton = screen.getByRole('button', { name: '点读 北边' })
+  await user.click(wordButton)
+
+  expect(wordButton).toHaveAttribute('aria-pressed', 'true')
+  expect(wordButton).toHaveClass('is-speaking')
+
+  await waitFor(
+    () => {
+      expect(wordButton).toHaveAttribute('aria-pressed', 'false')
+      expect(wordButton).not.toHaveClass('is-speaking')
+    },
+    { timeout: 1200 },
+  )
 })
 
 it('shows a gentle fallback when story audio is unavailable', async () => {

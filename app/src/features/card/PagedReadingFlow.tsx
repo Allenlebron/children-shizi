@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import type { CardDocument } from '../../content/types'
 import { speak, supportsSpeechSynthesis } from '../../lib/audio/speak'
@@ -31,6 +31,7 @@ export function PagedReadingFlow({ document }: PagedReadingFlowProps) {
   const [isFavorite, setIsFavorite] = useState(
     () => readProgress()[document.cardId]?.favorite ?? false,
   )
+  const [activeReadText, setActiveReadText] = useState<string | null>(null)
   const canPlayStory = supportsSpeechSynthesis()
   const currentStep = steps[stepIndex]
   const isFirstStep = stepIndex === 0
@@ -60,8 +61,24 @@ export function PagedReadingFlow({ document }: PagedReadingFlowProps) {
   }
 
   function playText(text: string) {
-    speak(text)
+    if (!speak(text)) {
+      return
+    }
+
+    setActiveReadText(text)
   }
+
+  useEffect(() => {
+    if (!activeReadText) {
+      return undefined
+    }
+
+    const timeoutId = window.setTimeout(() => {
+      setActiveReadText(null)
+    }, 850)
+
+    return () => window.clearTimeout(timeoutId)
+  }, [activeReadText])
 
   return (
     <article className="paged-reading" aria-label={`${card.character} 的绘本识字流程`}>
@@ -148,12 +165,16 @@ export function PagedReadingFlow({ document }: PagedReadingFlowProps) {
                 {getSafeList(card.words, `关于“${card.character}”的词`).map((word) => (
                   <li key={word}>
                     <button
-                      className="reading-read-button reading-word-button"
+                      className={`reading-read-button reading-word-button${
+                        activeReadText === word ? ' is-speaking' : ''
+                      }`}
                       type="button"
                       disabled={!canPlayStory}
                       aria-label={`点读 ${word}`}
+                      aria-pressed={activeReadText === word}
                       aria-describedby={canPlayStory ? undefined : 'language-audio-hint'}
                       onClick={() => playText(word)}
+                      data-speaking={activeReadText === word ? 'true' : undefined}
                     >
                       <span>{word}</span>
                     </button>
@@ -167,12 +188,16 @@ export function PagedReadingFlow({ document }: PagedReadingFlowProps) {
                 {getSafeList(card.sentences, '这一段我们先慢慢看图说一说。').map((sentence) => (
                   <li key={sentence}>
                     <button
-                      className="reading-read-button reading-sentence-button"
+                      className={`reading-read-button reading-sentence-button${
+                        activeReadText === sentence ? ' is-speaking' : ''
+                      }`}
                       type="button"
                       disabled={!canPlayStory}
                       aria-label={`点读 ${sentence}`}
+                      aria-pressed={activeReadText === sentence}
                       aria-describedby={canPlayStory ? undefined : 'language-audio-hint'}
                       onClick={() => playText(sentence)}
+                      data-speaking={activeReadText === sentence ? 'true' : undefined}
                     >
                       <span>{sentence}</span>
                     </button>

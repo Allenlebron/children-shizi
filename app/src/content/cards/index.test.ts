@@ -37,9 +37,48 @@ describe('card registry', () => {
     )
   })
 
-  it('adds comic scene metadata to the first MVP sample cards', () => {
-    expect(['北', '水', '火', '木'].map((character) => findCardByQuery(character)?.comic?.imageSrc)).toEqual(
-      ['/comics/bei.svg', '/comics/shui.svg', '/comics/huo.svg', '/comics/mu.svg'],
+  it('adds comic scene metadata to every MVP cached card', () => {
+    const cachedCharacters = [
+      '北',
+      '水',
+      '火',
+      '木',
+      '人',
+      '口',
+      '山',
+      '日',
+      '月',
+      '大',
+      '小',
+      '上',
+      '下',
+      '中',
+      '天',
+      '地',
+      '白',
+      '云',
+      '手',
+      '心',
+    ]
+
+    expect(
+      cachedCharacters.map((character) => {
+        const card = findCardByQuery(character)
+
+        return {
+          character: card?.character,
+          imageSrc: card?.comic?.imageSrc,
+          questions: card?.comic?.questions.length,
+        }
+      }),
+    ).toEqual(
+      cachedCharacters.map((character) =>
+        expect.objectContaining({
+          character,
+          imageSrc: expect.stringMatching(/^\/comics\/.+\.svg$/),
+          questions: 2,
+        }),
+      ),
     )
   })
 
