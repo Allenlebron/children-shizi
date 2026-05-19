@@ -4,6 +4,7 @@ import { CardPage } from '../features/card/CardPage'
 import { HomePage } from '../features/home/HomePage'
 import { LibraryPage } from '../features/library/LibraryPage'
 import { ProfilePage } from '../features/profile/ProfilePage'
+import { ReviewPage } from '../features/review/ReviewPage'
 import { AppShell } from '../layout/AppShell'
 
 export default function App() {
@@ -13,6 +14,7 @@ export default function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/cards" element={<LibraryPage />} />
         <Route path="/cards/:cardId" element={<CardPage />} />
+        <Route path="/review" element={<ReviewPage />} />
         <Route path="/admin" element={<AdminPage />} />
         <Route path="/me" element={<ProfilePage />} />
         <Route path="*" element={<Navigate to="/" replace />} />

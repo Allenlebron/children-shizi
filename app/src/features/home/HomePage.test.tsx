@@ -64,6 +64,19 @@ it('opens an MVP cached card without calling the generated search API', async ()
   expect(fetchMock).not.toHaveBeenCalled()
 })
 
+it('opens the leaf review quest from the home page', async () => {
+  const user = userEvent.setup()
+
+  renderApp('/')
+
+  expect(screen.getByText('今天已收集 0 片')).toBeInTheDocument()
+
+  await user.click(screen.getByRole('button', { name: /开始复习小闯关/i }))
+
+  expect(screen.getByTestId('location')).toHaveTextContent('/review')
+  expect(screen.getByRole('heading', { name: '小树叶闯关' })).toBeInTheDocument()
+})
+
 it('disables blank search and clears the miss message on input change', async () => {
   const user = userEvent.setup()
   vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce(

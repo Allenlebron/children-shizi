@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { findCardByQuery, getDailyCard } from '../../content/cards'
 import { generateCard, resolveSearch } from '../../lib/api/client'
 import { rememberPreviewToken } from '../../lib/preview-token'
+import { readReviewSummary } from '../../lib/progress/store'
 
 export function HomePage() {
   const navigate = useNavigate()
@@ -11,6 +12,7 @@ export function HomePage() {
   const [query, setQuery] = useState('')
   const [statusMessage, setStatusMessage] = useState('')
   const [isSearching, setIsSearching] = useState(false)
+  const reviewSummary = readReviewSummary()
   const trimmedQuery = query.trim()
 
   useEffect(() => {
@@ -83,6 +85,21 @@ export function HomePage() {
         <p className="home-helper">跟着故事看画面、听一听、说一说，慢慢认识这个字。</p>
         <button type="button" onClick={() => navigate(`/cards/${dailyCard.slug}`)}>
           开始今天这张卡
+        </button>
+      </article>
+
+      <article className="panel-card review-entry-card">
+        <span className="review-entry-leaf" aria-hidden="true">
+          叶
+        </span>
+        <div>
+          <p className="eyebrow">小树叶闯关 · 轻复习</p>
+          <h2>今天复习 3 个字</h2>
+          <p className="home-helper">看画面和词语，帮孩子把刚认识的字再找回来。</p>
+          <p className="review-entry-progress">今天已收集 {reviewSummary.todayLeaves} 片</p>
+        </div>
+        <button type="button" onClick={() => navigate('/review')}>
+          开始复习小闯关
         </button>
       </article>
 

@@ -1,4 +1,10 @@
-import { markCompleted, readProgress, toggleFavorite } from './store'
+import {
+  markCompleted,
+  readProgress,
+  readReviewSummary,
+  recordReviewResult,
+  toggleFavorite,
+} from './store'
 
 beforeEach(() => {
   localStorage.clear()
@@ -67,5 +73,36 @@ it('normalizes malformed stored progress entries into a safe shape', () => {
       favorite: false,
       lastOpenedAt: null,
     },
+  })
+})
+
+it('records review quest leaves for today', () => {
+  vi.setSystemTime(new Date('2026-04-23T08:00:00.000Z'))
+
+  recordReviewResult({ totalQuestions: 3, correctAnswers: 3, leaves: 3 })
+
+  expect(readReviewSummary()).toEqual({
+    todayKey: '2026-04-23',
+    todayAttempts: 1,
+    todayLeaves: 3,
+    totalAttempts: 1,
+    totalLeaves: 3,
+    lastCompletedAt: '2026-04-23T08:00:00.000Z',
+  })
+})
+
+it('ignores older review quest leaves in the today summary', () => {
+  vi.setSystemTime(new Date('2026-04-22T08:00:00.000Z'))
+  recordReviewResult({ totalQuestions: 3, correctAnswers: 2, leaves: 2 })
+
+  vi.setSystemTime(new Date('2026-04-23T08:00:00.000Z'))
+  recordReviewResult({ totalQuestions: 3, correctAnswers: 3, leaves: 3 })
+
+  expect(readReviewSummary()).toMatchObject({
+    todayKey: '2026-04-23',
+    todayAttempts: 1,
+    todayLeaves: 3,
+    totalAttempts: 2,
+    totalLeaves: 5,
   })
 })
