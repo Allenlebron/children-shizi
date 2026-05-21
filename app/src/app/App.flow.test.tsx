@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter, useLocation } from 'react-router-dom'
 import { getDailyCard } from '../content/cards'
@@ -40,11 +40,16 @@ it('lets a parent finish the daily card and then see it on the profile page', as
   await user.click(screen.getByRole('button', { name: '下一页' }))
   await user.click(screen.getByRole('button', { name: '今天这张读完了' }))
 
-  expect(screen.getByTestId('location')).toHaveTextContent('/')
+  await waitFor(() => {
+    expect(screen.getByTestId('location')).toHaveTextContent(/^\/$/)
+  })
 
   await user.click(screen.getByRole('link', { name: '我的' }))
 
   expect(screen.getByTestId('location')).toHaveTextContent('/me')
   expect(screen.getByText('学过 1 张')).toBeInTheDocument()
-  expect(screen.getByText(dailyCard?.character ?? '')).toBeInTheDocument()
+  expect(screen.getByRole('link', { name: dailyCard?.character ?? '' })).toHaveAttribute(
+    'href',
+    `/cards/${dailyCard?.slug}`,
+  )
 })

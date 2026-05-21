@@ -20,6 +20,8 @@ const steps: Array<{ key: ReadingStepKey; label: string }> = [
   { key: 'finish', label: '完成' },
 ]
 
+const finishCelebrationDuration = 760
+
 function getSafeList(items: string[], fallback: string) {
   return items.length > 0 ? items : [fallback]
 }
@@ -32,6 +34,7 @@ export function PagedReadingFlow({ document }: PagedReadingFlowProps) {
     () => readProgress()[document.cardId]?.favorite ?? false,
   )
   const [activeReadText, setActiveReadText] = useState<string | null>(null)
+  const [isFinishing, setIsFinishing] = useState(false)
   const canPlayStory = supportsSpeechSynthesis()
   const currentStep = steps[stepIndex]
   const isFirstStep = stepIndex === 0
@@ -51,8 +54,12 @@ export function PagedReadingFlow({ document }: PagedReadingFlowProps) {
   }
 
   function finishCard() {
+    if (isFinishing) {
+      return
+    }
+
     markCompleted(snapshot)
-    navigate('/')
+    setIsFinishing(true)
   }
 
   function toggleCardFavorite() {
@@ -80,6 +87,18 @@ export function PagedReadingFlow({ document }: PagedReadingFlowProps) {
     return () => window.clearTimeout(timeoutId)
   }, [activeReadText])
 
+  useEffect(() => {
+    if (!isFinishing) {
+      return undefined
+    }
+
+    const timeoutId = window.setTimeout(() => {
+      navigate('/')
+    }, finishCelebrationDuration)
+
+    return () => window.clearTimeout(timeoutId)
+  }, [isFinishing, navigate])
+
   return (
     <article className="paged-reading" aria-label={`${card.character} 的绘本识字流程`}>
       <header className="reading-topbar">
@@ -89,6 +108,29 @@ export function PagedReadingFlow({ document }: PagedReadingFlowProps) {
         >
           {stepIndex + 1} / {steps.length} · {currentStep.label}
         </p>
+        <ol className="reading-progress-leaves" aria-label="阅读小叶子进度">
+          {steps.map((step, index) => {
+            const isCurrentStep = index === stepIndex
+            const isDoneStep = index < stepIndex
+            const state = isCurrentStep ? 'current' : isDoneStep ? 'done' : 'waiting'
+
+            return (
+              <li
+                aria-current={isCurrentStep ? 'step' : undefined}
+                aria-label={`第 ${index + 1} 页，${step.label}${
+                  isCurrentStep ? '，当前页' : isDoneStep ? '，已读过' : '，还没读'
+                }`}
+                className={`reading-progress-leaf reading-progress-leaf-${state}`}
+                key={step.key}
+              >
+                <span className="reading-progress-leaf-shape" aria-hidden="true" />
+                <span className="reading-progress-leaf-index" aria-hidden="true">
+                  {index + 1}
+                </span>
+              </li>
+            )
+          })}
+        </ol>
       </header>
 
       <section className={`reading-page-card reading-page-${currentStep.key}`} key={currentStep.key}>
@@ -228,12 +270,26 @@ export function PagedReadingFlow({ document }: PagedReadingFlowProps) {
             <p className="card-section-label">完成收尾</p>
             <h1 className="reading-page-heading">今天这张读完了</h1>
             <p className="reading-story-text">可以夸孩子一句：你刚才认真听完了一个故事。</p>
+            {isFinishing ? (
+              <div className="reading-finish-celebration" role="status" aria-live="polite">
+                <span aria-hidden="true" />
+                <span aria-hidden="true" />
+                <span aria-hidden="true" />
+                <span aria-hidden="true" />
+                <p>小树又长大一点啦</p>
+              </div>
+            ) : null}
             <div className="reading-action-grid">
-              <button className="button-secondary" type="button" onClick={toggleCardFavorite}>
+              <button
+                className="button-secondary"
+                type="button"
+                disabled={isFinishing}
+                onClick={toggleCardFavorite}
+              >
                 {isFavorite ? '取消收藏' : '收藏这张卡'}
               </button>
-              <button type="button" onClick={finishCard}>
-                今天这张读完了
+              <button type="button" disabled={isFinishing} onClick={finishCard}>
+                {isFinishing ? '小树发光中...' : '今天这张读完了'}
               </button>
             </div>
           </>
@@ -244,7 +300,12 @@ export function PagedReadingFlow({ document }: PagedReadingFlowProps) {
         {isFirstStep ? (
           <span />
         ) : (
-          <button className="button-secondary" type="button" onClick={goBack}>
+          <button
+            className="button-secondary"
+            type="button"
+            disabled={isFinishing}
+            onClick={goBack}
+          >
             上一步
           </button>
         )}

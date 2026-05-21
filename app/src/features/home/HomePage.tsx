@@ -52,7 +52,7 @@ export function HomePage() {
         return
       }
 
-      setStatusMessage('正在为你准备...')
+      setStatusMessage('小树叶正在发芽，故事卡马上长出来。')
 
       const generated = await generateCard(trimmedQuery)
 
@@ -72,7 +72,7 @@ export function HomePage() {
 
   return (
     <section className="hero-stack home-forest">
-      <article className="hero-card hero-card-daily">
+      <article className="hero-card hero-card-daily home-entry-card home-entry-daily">
         <span className="storybook-blob storybook-blob-one" aria-hidden="true" />
         <span className="storybook-blob storybook-blob-two" aria-hidden="true" />
         <p className="eyebrow">森林识字队 · 今天的故事字</p>
@@ -88,7 +88,7 @@ export function HomePage() {
         </button>
       </article>
 
-      <article className="panel-card review-entry-card">
+      <article className="panel-card review-entry-card home-entry-card home-entry-review">
         <span className="review-entry-leaf" aria-hidden="true">
           叶
         </span>
@@ -103,7 +103,7 @@ export function HomePage() {
         </button>
       </article>
 
-      <form className="panel-card search-card" onSubmit={openQuery}>
+      <form className="panel-card search-card home-entry-card home-entry-search" onSubmit={openQuery}>
         <div className="section-header-row">
           <label htmlFor="card-query">搜一个字</label>
           <span className="soft-badge" aria-hidden="true">
@@ -122,8 +122,15 @@ export function HomePage() {
           }}
         />
         <button type="submit" disabled={!trimmedQuery || isSearching}>
-          {isSearching ? '正在准备...' : '打开这个字卡'}
+          {isSearching ? '小树叶发芽中...' : '打开这个字卡'}
         </button>
+        {isSearching && statusMessage.startsWith('小树叶正在发芽') ? (
+          <div className="sprout-loading" data-testid="sprout-loading" aria-hidden="true">
+            <span />
+            <span />
+            <span />
+          </div>
+        ) : null}
         {statusMessage ? (
           <p className="field-hint" role="status" aria-live="polite">
             {statusMessage}

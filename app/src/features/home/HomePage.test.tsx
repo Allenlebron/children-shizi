@@ -11,7 +11,7 @@ function LocationProbe() {
 }
 
 function renderApp(path: string = '/') {
-  render(
+  return render(
     <MemoryRouter initialEntries={[path]}>
       <LocationProbe />
       <App />
@@ -19,9 +19,26 @@ function renderApp(path: string = '/') {
   )
 }
 
+function createDeferred<T>() {
+  let resolve!: (value: T) => void
+  const promise = new Promise<T>((resolvePromise) => {
+    resolve = resolvePromise
+  })
+
+  return { promise, resolve }
+}
+
 afterEach(() => {
   vi.restoreAllMocks()
   window.localStorage.clear()
+})
+
+it('stages the home cards for a storybook arrival', () => {
+  const { container } = renderApp('/')
+
+  expect(container.querySelector('.home-entry-daily')).toBeInTheDocument()
+  expect(container.querySelector('.home-entry-review')).toBeInTheDocument()
+  expect(container.querySelector('.home-entry-search')).toBeInTheDocument()
 })
 
 it('navigates the daily card CTA to /cards/bei', async () => {
@@ -143,6 +160,39 @@ it('generates a private card and navigates to the returned card id', async () =>
 
   await user.type(screen.getByLabelText(/搜一个字/i), '马')
   await user.click(screen.getByRole('button', { name: /打开这个字卡/i }))
+
+  await waitFor(() => {
+    expect(screen.getByTestId('location')).toHaveTextContent('/cards/priv-ma-001')
+  })
+})
+
+it('shows a sprouting leaf loading state while a new card is being generated', async () => {
+  const user = userEvent.setup()
+  const generatedResponse = createDeferred<Response>()
+
+  vi.spyOn(globalThis, 'fetch')
+    .mockResolvedValueOnce(
+      new Response(JSON.stringify({ status: 'needs_generation', query: '马' }), {
+        status: 200,
+        headers: { 'content-type': 'application/json' },
+      }),
+    )
+    .mockReturnValueOnce(generatedResponse.promise)
+
+  renderApp('/')
+
+  await user.type(screen.getByLabelText(/搜一个字/i), '马')
+  await user.click(screen.getByRole('button', { name: /打开这个字卡/i }))
+
+  expect(await screen.findByRole('status')).toHaveTextContent('小树叶正在发芽')
+  expect(screen.getByTestId('sprout-loading')).toBeInTheDocument()
+
+  generatedResponse.resolve(
+    new Response(JSON.stringify({ status: 'ready_private', query: '马', cardId: 'priv-ma-001' }), {
+      status: 200,
+      headers: { 'content-type': 'application/json' },
+    }),
+  )
 
   await waitFor(() => {
     expect(screen.getByTestId('location')).toHaveTextContent('/cards/priv-ma-001')
