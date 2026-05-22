@@ -143,12 +143,12 @@ a {
 }
 
 .hero-card-daily {
-  min-height: 388px;
+  min-height: 336px;
   align-content: center;
   background:
-    radial-gradient(circle at 84% 16%, rgba(255, 231, 137, 0.86) 0 64px, transparent 66px),
-    radial-gradient(circle at 18% 94%, rgba(126, 211, 150, 0.45) 0 76px, transparent 78px),
-    linear-gradient(150deg, rgba(255, 254, 242, 0.98), rgba(222, 250, 232, 0.94));
+    radial-gradient(circle at 84% 14%, rgba(255, 231, 137, 0.72) 0 54px, transparent 56px),
+    radial-gradient(circle at 14% 96%, rgba(126, 211, 150, 0.3) 0 58px, transparent 60px),
+    linear-gradient(150deg, rgba(255, 254, 242, 0.98), rgba(231, 249, 235, 0.92));
 }
 
 .hero-card-daily::before,
@@ -160,22 +160,22 @@ a {
 }
 
 .hero-card-daily::before {
-  inset: 96px 28px auto;
-  height: 154px;
+  inset: 86px 56px auto;
+  height: 132px;
   border-radius: 44% 56% 48% 52%;
   background:
-    radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.72), transparent 42%),
-    linear-gradient(145deg, rgba(255, 248, 210, 0.78), rgba(203, 238, 186, 0.58));
-  box-shadow: inset 0 -10px 0 rgba(74, 159, 99, 0.08);
+    radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.66), transparent 42%),
+    linear-gradient(145deg, rgba(255, 248, 210, 0.58), rgba(203, 238, 186, 0.42));
+  box-shadow: inset 0 -8px 0 rgba(74, 159, 99, 0.06);
 }
 
 .hero-card-daily::after {
-  right: 26px;
-  bottom: 92px;
-  width: 68px;
-  height: 32px;
+  right: 30px;
+  bottom: 78px;
+  width: 54px;
+  height: 26px;
   border-radius: 999px 28px 999px 28px;
-  background: rgba(74, 159, 99, 0.22);
+  background: rgba(74, 159, 99, 0.16);
   transform: rotate(-18deg);
 }
 
@@ -243,7 +243,6 @@ a {
   text-transform: uppercase;
 }
 
-.mission-row,
 .section-header-row,
 .profile-summary-row {
   display: flex;
@@ -252,12 +251,6 @@ a {
   gap: 12px;
 }
 
-.mission-row {
-  justify-content: flex-start;
-  flex-wrap: wrap;
-}
-
-.mission-row span,
 .soft-badge {
   display: inline-flex;
   align-items: center;
@@ -275,21 +268,21 @@ a {
 .hero-character {
   display: grid;
   place-items: center;
-  width: min(68vw, 214px);
+  width: min(58vw, 188px);
   aspect-ratio: 1;
-  margin: 8px auto 0;
+  margin: 4px auto 0;
   border: 3px solid rgba(255, 255, 255, 0.86);
   border-radius: 44% 56% 50% 50%;
   background:
-    radial-gradient(circle at 28% 18%, rgba(255, 255, 255, 0.74) 0 28px, transparent 30px),
-    linear-gradient(145deg, #fff9db 0%, #dff5c7 100%);
+    radial-gradient(circle at 28% 18%, rgba(255, 255, 255, 0.72) 0 24px, transparent 26px),
+    linear-gradient(145deg, #fff9db 0%, #e7f7d3 100%);
   color: #233526;
-  font-size: clamp(92px, 26vw, 126px);
+  font-size: clamp(84px, 23vw, 112px);
   font-weight: 950;
   line-height: 1;
   text-align: center;
-  text-shadow: 0 7px 0 rgba(255, 255, 255, 0.7);
-  box-shadow: inset 0 -12px 0 rgba(74, 159, 99, 0.08), 0 18px 32px rgba(75, 91, 45, 0.13);
+  text-shadow: 0 6px 0 rgba(255, 255, 255, 0.7);
+  box-shadow: inset 0 -10px 0 rgba(74, 159, 99, 0.06), 0 14px 24px rgba(75, 91, 45, 0.11);
   animation: hanzi-breathe 4.8s ease-in-out infinite;
 }
 
@@ -311,7 +304,19 @@ a {
 }
 
 .hero-card button {
-  margin-top: 8px;
+  margin-top: 4px;
+}
+
+.hero-card-daily button {
+  box-shadow: 0 8px 0 rgba(154, 82, 39, 0.12), 0 14px 24px rgba(205, 105, 54, 0.18);
+}
+
+.hero-card-daily button:not(:disabled):hover {
+  box-shadow: 0 10px 0 rgba(154, 82, 39, 0.1), 0 18px 28px rgba(205, 105, 54, 0.2);
+}
+
+.hero-card-daily button:not(:disabled):active {
+  box-shadow: 0 6px 0 rgba(154, 82, 39, 0.12), 0 10px 18px rgba(205, 105, 54, 0.16);
 }
 
 .search-card {
@@ -324,52 +329,75 @@ a {
 }
 
 .review-entry-card {
-  display: grid;
-  grid-template-columns: 64px minmax(0, 1fr);
-  gap: 14px;
-  align-items: center;
+  padding: 10px;
   background:
-    radial-gradient(circle at 88% 22%, rgba(137, 214, 109, 0.24) 0 54px, transparent 56px),
-    radial-gradient(circle at 0% 100%, rgba(255, 216, 191, 0.24) 0 72px, transparent 74px),
-    linear-gradient(145deg, rgba(255, 253, 234, 0.94), rgba(229, 250, 221, 0.9));
+    radial-gradient(circle at 90% 14%, rgba(137, 214, 109, 0.2) 0 42px, transparent 44px),
+    linear-gradient(145deg, rgba(255, 253, 234, 0.88), rgba(235, 250, 225, 0.86));
   box-shadow: var(--forest-soft-shadow);
 }
 
-.review-entry-card button {
-  grid-column: 1 / -1;
-  min-height: 50px;
+.review-entry-action {
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+  width: 100%;
+  min-height: 76px;
+  padding: 12px 14px;
+  border: 1px solid rgba(74, 159, 99, 0.16);
+  background:
+    radial-gradient(circle at 14% 18%, rgba(255, 255, 255, 0.9), transparent 36%),
+    linear-gradient(145deg, rgba(255, 255, 244, 0.94), rgba(225, 246, 214, 0.86));
+  color: var(--forest-leaf-deep);
+  text-align: left;
+  box-shadow: none;
+}
+
+.review-entry-action:not(:disabled):hover {
+  box-shadow: 0 12px 22px rgba(77, 112, 58, 0.12);
+}
+
+.review-entry-action:not(:disabled):active {
+  box-shadow: 0 8px 16px rgba(77, 112, 58, 0.1);
 }
 
 .review-entry-leaf {
   display: grid;
   place-items: center;
-  width: 58px;
-  height: 58px;
+  width: 48px;
+  height: 48px;
   border-radius: 64% 36% 58% 42%;
   background: linear-gradient(145deg, #84cf6f, #3f9f63);
   color: #fffdf2;
-  font-size: 19px;
+  font-size: 17px;
   font-weight: 950;
   transform: rotate(-16deg);
-  box-shadow: 0 12px 20px rgba(70, 139, 66, 0.24);
+  box-shadow: 0 10px 18px rgba(70, 139, 66, 0.2);
   animation: leaf-sway 5.4s ease-in-out infinite alternate;
 }
 
-.review-entry-card h2 {
-  margin: 0 0 6px;
-  color: #244b32;
-  font-size: 23px;
+.review-entry-copy {
+  display: grid;
+  gap: 2px;
 }
 
-.review-entry-progress {
-  display: inline-flex;
-  margin: 10px 0 0;
-  padding: 6px 12px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.72);
-  color: var(--forest-leaf-deep);
+.review-entry-copy strong {
+  color: #244b32;
+  font-size: 17px;
+  font-weight: 950;
+  line-height: 1.35;
+}
+
+.review-entry-copy span {
+  color: var(--forest-muted);
   font-size: 14px;
-  font-weight: 900;
+  font-weight: 850;
+}
+
+.review-entry-arrow {
+  color: rgba(46, 122, 75, 0.56);
+  font-size: 21px;
+  font-weight: 950;
 }
 
 label {

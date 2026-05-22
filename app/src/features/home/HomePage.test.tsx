@@ -41,6 +41,15 @@ it('stages the home cards for a storybook arrival', () => {
   expect(container.querySelector('.home-entry-search')).toBeInTheDocument()
 })
 
+it('keeps the daily cover focused on starting the story', () => {
+  renderApp('/')
+
+  expect(screen.queryByText('今日小任务')).not.toBeInTheDocument()
+  expect(screen.queryByText('约 5 分钟')).not.toBeInTheDocument()
+  expect(screen.queryByText(/跟着故事看画面、听一听、说一说/i)).not.toBeInTheDocument()
+  expect(screen.getByRole('button', { name: /开始今天这张卡/i })).toBeInTheDocument()
+})
+
 it('navigates the daily card CTA to /cards/bei', async () => {
   const user = userEvent.setup()
 
@@ -88,7 +97,7 @@ it('opens the leaf review quest from the home page', async () => {
 
   expect(screen.getByText('今天已收集 0 片')).toBeInTheDocument()
 
-  await user.click(screen.getByRole('button', { name: /开始复习小闯关/i }))
+  await user.click(screen.getByRole('button', { name: /去收今天的小树叶/i }))
 
   expect(screen.getByTestId('location')).toHaveTextContent('/review')
   expect(screen.getByRole('heading', { name: '小树叶闯关' })).toBeInTheDocument()
