@@ -1150,6 +1150,11 @@ button:disabled {
   gap: 14px;
 }
 
+.library-heading-block {
+  display: grid;
+  gap: 8px;
+}
+
 .library-page h1,
 .profile-page h1 {
   margin: 0;
@@ -1158,7 +1163,27 @@ button:disabled {
   line-height: 1.15;
 }
 
-.library-card-list,
+.library-card-list {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin: 8px 0 0;
+  padding-bottom: 14px;
+}
+
+.library-card-list::after {
+  position: absolute;
+  right: 6px;
+  bottom: 0;
+  left: 6px;
+  height: 12px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(123, 90, 51, 0.12), rgba(255, 231, 137, 0.42), rgba(123, 90, 51, 0.12));
+  box-shadow: 0 8px 16px rgba(75, 91, 45, 0.08);
+  content: '';
+}
+
 .profile-card-list {
   display: grid;
   gap: 12px;
@@ -1166,59 +1191,93 @@ button:disabled {
 }
 
 .library-card-link {
+  position: relative;
   display: grid;
-  grid-template-columns: 72px 1fr auto;
-  gap: 12px;
-  align-items: center;
-  padding: 14px;
-  border: 2px solid rgba(255, 255, 255, 0.72);
-  border-radius: 24px;
-  background: linear-gradient(145deg, rgba(255, 255, 255, 0.78), rgba(231, 248, 220, 0.72));
+  align-content: space-between;
+  min-height: 178px;
+  padding: 13px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.82);
+  border-radius: 30px 24px 32px 24px;
+  background:
+    radial-gradient(circle at 78% 12%, rgba(255, 231, 137, 0.42) 0 34px, transparent 36px),
+    linear-gradient(158deg, rgba(255, 254, 239, 0.96), rgba(220, 246, 216, 0.9));
+  color: #263a29;
   text-decoration: none;
-  box-shadow: 0 12px 26px rgba(75, 91, 45, 0.1);
+  box-shadow: inset 0 -10px 0 rgba(74, 159, 99, 0.06), 0 12px 24px rgba(75, 91, 45, 0.1);
+  transform: rotate(-0.45deg);
   animation: card-pop 420ms ease both;
-  transition: transform 180ms ease, box-shadow 180ms ease;
+  animation-delay: calc(var(--library-card-index) * 45ms);
+  transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
 }
 
-.library-card-item:nth-child(2) .library-card-link,
+.library-card-item:nth-child(even) .library-card-link {
+  border-radius: 24px 32px 24px 30px;
+  background:
+    radial-gradient(circle at 22% 14%, rgba(255, 216, 191, 0.3) 0 32px, transparent 34px),
+    linear-gradient(158deg, rgba(255, 253, 239, 0.96), rgba(227, 247, 237, 0.9));
+  transform: rotate(0.55deg);
+}
+
+.library-cover-label {
+  justify-self: start;
+  padding: 5px 9px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.72);
+  color: rgba(46, 122, 75, 0.78);
+  font-size: 12px;
+  font-weight: 950;
+}
+
 .profile-card-item:nth-child(2) a {
   animation-delay: 70ms;
 }
 
-.library-card-item:nth-child(3) .library-card-link,
 .profile-card-item:nth-child(3) a {
   animation-delay: 140ms;
 }
 
 .library-card-link:hover,
 .profile-card-item a:hover {
-  transform: translateY(-2px) rotate(-0.5deg);
-  box-shadow: 0 16px 30px rgba(75, 91, 45, 0.14);
+  transform: translateY(-3px) rotate(0deg);
+  box-shadow: inset 0 -10px 0 rgba(74, 159, 99, 0.05), 0 18px 30px rgba(75, 91, 45, 0.14);
 }
 
 .library-hanzi {
   display: grid;
   place-items: center;
-  width: 62px;
-  height: 62px;
-  border-radius: 22px;
-  background: #fff8dc;
+  width: 84px;
+  aspect-ratio: 1;
+  justify-self: center;
+  border-radius: 34% 66% 48% 52%;
+  background:
+    radial-gradient(circle at 30% 18%, rgba(255, 255, 255, 0.78) 0 18px, transparent 20px),
+    #fff8dc;
   color: #263a29;
-  font-size: 40px;
+  font-size: 54px;
   font-weight: 950;
-  box-shadow: inset 0 -5px 0 rgba(255, 198, 95, 0.24);
+  line-height: 1;
+  box-shadow: inset 0 -7px 0 rgba(255, 198, 95, 0.18), 0 10px 18px rgba(75, 91, 45, 0.08);
 }
 
 .library-theme {
+  justify-self: center;
   color: #31543b;
-  font-size: 18px;
+  font-size: 17px;
   font-weight: 900;
+  line-height: 1.3;
+  text-align: center;
 }
 
 .library-action {
+  justify-self: stretch;
+  padding: 8px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.72);
   color: var(--forest-leaf-deep);
   font-size: 13px;
-  font-weight: 900;
+  font-weight: 950;
+  text-align: center;
 }
 
 .profile-stats {
@@ -1813,12 +1872,12 @@ button:disabled {
     grid-template-columns: 1fr;
   }
 
-  .library-card-link {
-    grid-template-columns: 58px 1fr;
+  .library-card-list {
+    grid-template-columns: 1fr;
   }
 
-  .library-action {
-    grid-column: 2;
+  .library-card-link {
+    min-height: 156px;
   }
 }
 

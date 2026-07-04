@@ -22,7 +22,7 @@ it('renders the home page and bottom nav at /', () => {
 it('renders the library placeholder through the shell at /cards', () => {
   renderApp('/cards')
 
-  expect(screen.getByRole('heading', { name: /精选字卡/i })).toBeInTheDocument()
+  expect(screen.getByRole('heading', { name: /森林小书架/i })).toBeInTheDocument()
   expect(screen.getByRole('navigation', { name: /主导航/i })).toBeInTheDocument()
   expect(screen.getByRole('link', { name: /字卡/i })).toHaveAttribute('aria-current', 'page')
   expect(screen.getByRole('link', { name: /北 · 方向/i })).toHaveAttribute('href', '/cards/bei')
