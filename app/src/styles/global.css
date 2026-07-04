@@ -13,8 +13,8 @@
   --forest-blush: #ffd8bf;
   --forest-wash: rgba(255, 255, 246, 0.72);
   --forest-paper: rgba(255, 252, 241, 0.92);
-  --forest-shadow: 0 24px 54px rgba(75, 91, 45, 0.16);
-  --forest-soft-shadow: 0 14px 30px rgba(75, 91, 45, 0.11);
+  --forest-shadow: 0 18px 38px rgba(75, 91, 45, 0.12);
+  --forest-soft-shadow: 0 10px 22px rgba(75, 91, 45, 0.09);
   color: var(--forest-ink);
   background: #eff9e8;
   font-family: 'LXGW WenKai', 'ZCOOL KuaiLe', 'Noto Serif SC', 'PingFang SC', serif;
@@ -29,10 +29,10 @@ body {
   min-width: 320px;
   overflow-x: hidden;
   background:
-    radial-gradient(circle at 12% 12%, rgba(255, 231, 137, 0.76) 0 116px, transparent 118px),
-    radial-gradient(circle at 92% 8%, rgba(178, 234, 197, 0.82) 0 146px, transparent 148px),
-    radial-gradient(circle at 88% 76%, rgba(173, 220, 148, 0.26) 0 132px, transparent 134px),
-    linear-gradient(180deg, #e4faee 0%, #fff9e8 48%, #f8edd6 100%);
+    radial-gradient(circle at 10% 10%, rgba(255, 231, 137, 0.42) 0 96px, transparent 98px),
+    radial-gradient(circle at 92% 9%, rgba(178, 234, 197, 0.48) 0 118px, transparent 120px),
+    radial-gradient(circle at 88% 76%, rgba(173, 220, 148, 0.18) 0 112px, transparent 114px),
+    linear-gradient(180deg, #edf9e7 0%, #fff9eb 54%, #f8efd9 100%);
 }
 
 button,
@@ -41,18 +41,18 @@ input {
 }
 
 #root {
-  min-height: 100vh;
+  min-height: 100dvh;
 }
 
 .page-shell {
   position: relative;
-  min-height: 100vh;
+  min-height: 100dvh;
   padding-bottom: calc(94px + env(safe-area-inset-bottom));
   overflow: visible;
   touch-action: pan-y;
   background-image:
-    radial-gradient(circle, rgba(255, 255, 255, 0.28) 1px, transparent 1.6px),
-    radial-gradient(circle, rgba(74, 159, 99, 0.08) 1px, transparent 1.4px);
+    radial-gradient(circle, rgba(255, 255, 255, 0.2) 1px, transparent 1.6px),
+    radial-gradient(circle, rgba(74, 159, 99, 0.05) 1px, transparent 1.4px);
   background-position: 0 0, 14px 16px;
   background-size: 36px 36px, 42px 42px;
 }
@@ -87,7 +87,7 @@ input {
 .page-main {
   position: relative;
   z-index: 1;
-  padding: 24px 16px calc(106px + env(safe-area-inset-bottom));
+  padding: 20px 16px calc(104px + env(safe-area-inset-bottom));
 }
 
 h1,
@@ -101,9 +101,29 @@ a {
   color: inherit;
 }
 
+.skip-link {
+  position: fixed;
+  z-index: 20;
+  top: 12px;
+  left: 12px;
+  padding: 9px 13px;
+  border-radius: 999px;
+  background: rgba(255, 253, 235, 0.94);
+  color: var(--forest-leaf-deep);
+  font-weight: 900;
+  text-decoration: none;
+  box-shadow: var(--forest-soft-shadow);
+  transform: translateY(-80px);
+  transition: transform 180ms ease;
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
 .hero-stack {
   display: grid;
-  gap: 16px;
+  gap: 14px;
   width: 100%;
   max-width: 430px;
   margin: 0 auto;
@@ -122,7 +142,7 @@ a {
   max-width: 430px;
   margin: 0 auto;
   overflow: hidden;
-  border: 2px solid rgba(255, 255, 255, 0.78);
+  border: 1px solid rgba(255, 255, 255, 0.82);
   background:
     linear-gradient(145deg, rgba(255, 255, 255, 0.92), rgba(255, 249, 230, 0.88)),
     var(--forest-paper);
@@ -143,12 +163,12 @@ a {
 }
 
 .hero-card-daily {
-  min-height: 336px;
+  min-height: 310px;
   align-content: center;
   background:
-    radial-gradient(circle at 84% 14%, rgba(255, 231, 137, 0.72) 0 54px, transparent 56px),
-    radial-gradient(circle at 14% 96%, rgba(126, 211, 150, 0.3) 0 58px, transparent 60px),
-    linear-gradient(150deg, rgba(255, 254, 242, 0.98), rgba(231, 249, 235, 0.92));
+    radial-gradient(circle at 86% 14%, rgba(255, 231, 137, 0.46) 0 48px, transparent 50px),
+    radial-gradient(circle at 14% 96%, rgba(126, 211, 150, 0.2) 0 52px, transparent 54px),
+    linear-gradient(150deg, rgba(255, 254, 244, 0.98), rgba(235, 249, 237, 0.9));
 }
 
 .hero-card-daily::before,
@@ -161,7 +181,7 @@ a {
 
 .hero-card-daily::before {
   inset: 86px 56px auto;
-  height: 132px;
+  height: 112px;
   border-radius: 44% 56% 48% 52%;
   background:
     radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.66), transparent 42%),
@@ -211,19 +231,19 @@ a {
 .storybook-blob-one {
   top: 34px;
   right: -20px;
-  width: 88px;
-  height: 52px;
-  background: rgba(255, 255, 255, 0.88);
-  box-shadow: -36px 12px 0 rgba(255, 255, 255, 0.66);
+  width: 74px;
+  height: 44px;
+  background: rgba(255, 255, 255, 0.74);
+  box-shadow: -28px 10px 0 rgba(255, 255, 255, 0.5);
   animation: cloud-drift 7s ease-in-out infinite alternate;
 }
 
 .storybook-blob-two {
   bottom: -28px;
   left: -18px;
-  width: 120px;
-  height: 120px;
-  background: rgba(130, 211, 150, 0.34);
+  width: 96px;
+  height: 96px;
+  background: rgba(130, 211, 150, 0.22);
   animation: leaf-sway 6s ease-in-out infinite alternate;
 }
 
@@ -268,7 +288,7 @@ a {
 .hero-character {
   display: grid;
   place-items: center;
-  width: min(58vw, 188px);
+  width: min(54vw, 172px);
   aspect-ratio: 1;
   margin: 4px auto 0;
   border: 3px solid rgba(255, 255, 255, 0.86);
@@ -277,12 +297,12 @@ a {
     radial-gradient(circle at 28% 18%, rgba(255, 255, 255, 0.72) 0 24px, transparent 26px),
     linear-gradient(145deg, #fff9db 0%, #e7f7d3 100%);
   color: #233526;
-  font-size: clamp(84px, 23vw, 112px);
+  font-size: clamp(82px, 22vw, 104px);
   font-weight: 950;
   line-height: 1;
   text-align: center;
   text-shadow: 0 6px 0 rgba(255, 255, 255, 0.7);
-  box-shadow: inset 0 -10px 0 rgba(74, 159, 99, 0.06), 0 14px 24px rgba(75, 91, 45, 0.11);
+  box-shadow: inset 0 -8px 0 rgba(74, 159, 99, 0.05), 0 10px 18px rgba(75, 91, 45, 0.08);
   animation: hanzi-breathe 4.8s ease-in-out infinite;
 }
 
@@ -323,15 +343,15 @@ a {
   display: grid;
   gap: 10px;
   background:
-    radial-gradient(circle at 88% 18%, rgba(255, 231, 137, 0.34) 0 54px, transparent 56px),
-    linear-gradient(145deg, rgba(255, 254, 244, 0.9), rgba(255, 249, 232, 0.82));
+    radial-gradient(circle at 88% 18%, rgba(255, 231, 137, 0.24) 0 46px, transparent 48px),
+    linear-gradient(145deg, rgba(255, 254, 244, 0.9), rgba(255, 250, 235, 0.78));
   box-shadow: var(--forest-soft-shadow);
 }
 
 .review-entry-card {
   padding: 10px;
   background:
-    radial-gradient(circle at 90% 14%, rgba(137, 214, 109, 0.2) 0 42px, transparent 44px),
+    radial-gradient(circle at 90% 14%, rgba(137, 214, 109, 0.14) 0 36px, transparent 38px),
     linear-gradient(145deg, rgba(255, 253, 234, 0.88), rgba(235, 250, 225, 0.86));
   box-shadow: var(--forest-soft-shadow);
 }
@@ -474,23 +494,28 @@ button {
   cursor: pointer;
   font-size: 17px;
   font-weight: 950;
-  box-shadow: 0 10px 0 rgba(154, 82, 39, 0.15), 0 18px 32px rgba(205, 105, 54, 0.22);
+  box-shadow: 0 8px 0 rgba(154, 82, 39, 0.12), 0 14px 24px rgba(205, 105, 54, 0.18);
   transition: transform 160ms ease, box-shadow 160ms ease, opacity 160ms ease;
 }
 
 button:not(:disabled):hover {
   transform: translateY(-2px);
-  box-shadow: 0 14px 0 rgba(154, 82, 39, 0.1), 0 22px 36px rgba(205, 105, 54, 0.24);
+  box-shadow: 0 11px 0 rgba(154, 82, 39, 0.1), 0 18px 28px rgba(205, 105, 54, 0.2);
 }
 
 button:not(:disabled):active {
   transform: translateY(2px);
-  box-shadow: 0 8px 0 rgba(154, 82, 39, 0.14), 0 12px 24px rgba(205, 105, 54, 0.2);
+  box-shadow: 0 6px 0 rgba(154, 82, 39, 0.12), 0 10px 18px rgba(205, 105, 54, 0.16);
 }
 
 button:disabled {
   cursor: not-allowed;
   opacity: 0.55;
+}
+
+:where(button, a, input):focus-visible {
+  outline: 3px solid rgba(46, 122, 75, 0.42);
+  outline-offset: 4px;
 }
 
 .button-secondary {
@@ -568,112 +593,38 @@ button:disabled {
   display: grid;
   gap: 16px;
   max-width: 430px;
-  min-height: calc(100vh - 168px);
+  min-height: calc(100dvh - 168px);
   margin: 0 auto;
   animation: page-rise 420ms ease both;
 }
 
 .reading-topbar {
-  display: grid;
-  gap: 10px;
-  justify-items: center;
+  display: flex;
+  justify-content: center;
   padding: 0 6px;
 }
 
 .reading-progress-pill {
   display: inline-flex;
   align-items: center;
-  min-height: 34px;
+  min-height: 32px;
   margin: 0;
-  padding: 7px 14px;
+  padding: 7px 13px;
   border: 1px solid rgba(255, 255, 255, 0.78);
   border-radius: 999px;
   background: rgba(255, 252, 241, 0.84);
   color: var(--forest-leaf-deep);
-  font-size: 13px;
-  font-weight: 950;
-  line-height: 1.25;
-  box-shadow: 0 10px 22px rgba(75, 91, 45, 0.08), inset 0 -2px 0 rgba(74, 159, 99, 0.08);
-  backdrop-filter: blur(10px);
-}
-
-.reading-progress-leaves {
-  display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-  gap: 6px;
-  width: min(100%, 302px);
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.reading-progress-leaf {
-  position: relative;
-  display: grid;
-  place-items: center;
-  min-height: 34px;
-}
-
-.reading-progress-leaf + .reading-progress-leaf::before {
-  position: absolute;
-  top: 16px;
-  right: calc(50% + 14px);
-  left: calc(-50% + 14px);
-  z-index: 0;
-  height: 3px;
-  border-radius: 999px;
-  background: rgba(116, 170, 102, 0.18);
-  content: '';
-}
-
-.reading-progress-leaf-shape {
-  position: relative;
-  z-index: 1;
-  width: 24px;
-  height: 32px;
-  border: 2px solid rgba(255, 255, 255, 0.72);
-  border-radius: 999px 999px 999px 12px;
-  background: linear-gradient(145deg, rgba(255, 253, 224, 0.96), rgba(216, 235, 183, 0.92));
-  box-shadow: inset 0 -4px 0 rgba(74, 159, 99, 0.08), 0 8px 16px rgba(75, 91, 45, 0.1);
-  transform: rotate(-26deg);
-}
-
-.reading-progress-leaf-index {
-  position: absolute;
-  z-index: 2;
-  color: rgba(49, 84, 59, 0.66);
   font-size: 12px;
   font-weight: 950;
-  line-height: 1;
-}
-
-.reading-progress-leaf-done::before {
-  background: rgba(74, 159, 99, 0.36);
-}
-
-.reading-progress-leaf-done .reading-progress-leaf-shape {
-  background: linear-gradient(145deg, #91db79, #4da761);
-}
-
-.reading-progress-leaf-done .reading-progress-leaf-index,
-.reading-progress-leaf-current .reading-progress-leaf-index {
-  color: #fffceb;
-  text-shadow: 0 1px 0 rgba(37, 91, 53, 0.22);
-}
-
-.reading-progress-leaf-current .reading-progress-leaf-shape {
-  background: linear-gradient(145deg, #ffdc7e, #68bd70);
-  box-shadow:
-    inset 0 -4px 0 rgba(74, 159, 99, 0.08),
-    0 0 0 5px rgba(255, 241, 159, 0.34),
-    0 12px 18px rgba(75, 91, 45, 0.16);
-  animation: reading-leaf-pulse 1.8s ease-in-out infinite;
+  line-height: 1.25;
+  box-shadow: 0 8px 18px rgba(75, 91, 45, 0.06), inset 0 -2px 0 rgba(74, 159, 99, 0.06);
+  backdrop-filter: blur(10px);
 }
 
 .review-quest {
   display: grid;
   max-width: 430px;
-  min-height: calc(100vh - 164px);
+  min-height: calc(100dvh - 164px);
   margin: 0 auto;
   animation: page-rise 420ms ease both;
 }
@@ -1660,17 +1611,6 @@ button:disabled {
   to {
     opacity: 1;
     transform: translateY(0) rotate(0deg) scale(1);
-  }
-}
-
-@keyframes reading-leaf-pulse {
-  0%,
-  100% {
-    transform: rotate(-26deg) translateY(0) scale(1);
-  }
-
-  50% {
-    transform: rotate(-22deg) translateY(-3px) scale(1.05);
   }
 }
 

@@ -1,4 +1,4 @@
-import { render, screen, waitFor, within } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter, useLocation } from 'react-router-dom'
 import type { CardDocument } from '../../content/types'
@@ -96,12 +96,8 @@ it('starts on the scene step and advances through all six reading pages', async 
 
   renderFlow()
 
-  expect(screen.getByText('1 / 6 · 看画面')).toBeInTheDocument()
-  const progressRail = screen.getByRole('list', { name: '阅读小叶子进度' })
-  const progressLeaves = within(progressRail).getAllByRole('listitem')
-
-  expect(progressLeaves).toHaveLength(6)
-  expect(progressLeaves[0]).toHaveAttribute('aria-current', 'step')
+  expect(screen.getByText('第 1 页 · 看画面')).toBeInTheDocument()
+  expect(screen.queryByRole('list', { name: '阅读小叶子进度' })).not.toBeInTheDocument()
   expect(screen.queryByText('先像看绘本一样看一看画面。')).not.toBeInTheDocument()
   expect(screen.getByRole('heading', { name: '北' })).toBeInTheDocument()
   expect(screen.getByRole('img', { name: '小朋友在雪地里找北方' })).toBeInTheDocument()
@@ -110,28 +106,27 @@ it('starts on the scene step and advances through all six reading pages', async 
   expect(screen.queryByRole('button', { name: '上一步' })).not.toBeInTheDocument()
 
   await user.click(screen.getByRole('button', { name: '开始读这张卡' }))
-  expect(screen.getByText('2 / 6 · 听故事')).toBeInTheDocument()
-  expect(within(progressRail).getAllByRole('listitem')[1]).toHaveAttribute('aria-current', 'step')
+  expect(screen.getByText('第 2 页 · 听故事')).toBeInTheDocument()
   expect(screen.getByRole('heading', { name: '听 / 讲故事' })).toBeInTheDocument()
 
   await user.click(screen.getByRole('button', { name: '下一页' }))
-  expect(screen.getByText('3 / 6 · 认这个字')).toBeInTheDocument()
+  expect(screen.getByText('第 3 页 · 认这个字')).toBeInTheDocument()
   expect(screen.getByText('bei')).toBeInTheDocument()
   expect(screen.getByText('北 · 5 笔')).toBeInTheDocument()
   expect(screen.getByRole('img', { name: '北 的笔顺动画' })).toBeInTheDocument()
   expect(screen.getByText('先和孩子一起看画面，再说“像不像一个人转过去了”。')).toBeInTheDocument()
 
   await user.click(screen.getByRole('button', { name: '下一页' }))
-  expect(screen.getByText('4 / 6 · 读词句')).toBeInTheDocument()
+  expect(screen.getByText('第 4 页 · 读词句')).toBeInTheDocument()
   expect(screen.getByText('北边')).toBeInTheDocument()
   expect(screen.getByText('北风吹来了。')).toBeInTheDocument()
 
   await user.click(screen.getByRole('button', { name: '下一页' }))
-  expect(screen.getByText('5 / 6 · 互动一下')).toBeInTheDocument()
+  expect(screen.getByText('第 5 页 · 互动一下')).toBeInTheDocument()
   expect(screen.getByText('我们站起来转一转，找一找哪边是北。')).toBeInTheDocument()
 
   await user.click(screen.getByRole('button', { name: '下一页' }))
-  expect(screen.getByText('6 / 6 · 完成')).toBeInTheDocument()
+  expect(screen.getByText('第 6 页 · 完成')).toBeInTheDocument()
   expect(screen.getByRole('heading', { name: '今天这张读完了' })).toBeInTheDocument()
 })
 
@@ -146,7 +141,7 @@ it('lets the family go back to the previous reading page', async () => {
   await user.click(screen.getByRole('button', { name: '上一步' }))
 
   expect(screen.getByRole('heading', { name: '北' })).toBeInTheDocument()
-  expect(screen.getByText('1 / 6 · 看画面')).toBeInTheDocument()
+  expect(screen.getByText('第 1 页 · 看画面')).toBeInTheDocument()
 })
 
 it('speaks the story aloud from the story page', async () => {
@@ -331,12 +326,12 @@ it('favorites and completes the card from the finish page', async () => {
     completed: true,
     favorite: true,
   })
-  await waitFor(() => {
-    expect(screen.getByTestId('location')).toHaveTextContent(/^\/$/)
-  })
+  expect(screen.getByTestId('location')).toHaveTextContent('/cards/bei')
+  expect(screen.getByRole('button', { name: '去我的森林看看' })).toBeInTheDocument()
+  expect(screen.getByRole('button', { name: '回首页' })).toBeInTheDocument()
 })
 
-it('celebrates the finished card before returning home', async () => {
+it('celebrates the finished card and lets the family choose the next page', async () => {
   const user = userEvent.setup()
 
   renderFlow()
@@ -352,12 +347,9 @@ it('celebrates the finished card before returning home', async () => {
   expect(screen.getByTestId('location')).toHaveTextContent('/cards/bei')
   expect(screen.getByRole('button', { name: '上一步' })).toBeDisabled()
 
-  await waitFor(
-    () => {
-      expect(screen.getByTestId('location')).toHaveTextContent(/^\/$/)
-    },
-    { timeout: 1200 },
-  )
+  await user.click(screen.getByRole('button', { name: '去我的森林看看' }))
+
+  expect(screen.getByTestId('location')).toHaveTextContent('/me')
 })
 
 it('uses generated card ids and access source when saving progress', async () => {

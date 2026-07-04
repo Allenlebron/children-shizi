@@ -72,7 +72,7 @@ it('renders the paged card flow and speaks the story aloud from the story page',
 
   renderApp('/cards/bei')
 
-  expect(screen.getByText('1 / 6 · 看画面')).toBeInTheDocument()
+  expect(screen.getByText('第 1 页 · 看画面')).toBeInTheDocument()
   expect(screen.getByText('故事画面')).toBeInTheDocument()
   expect(screen.getByRole('img', { name: '小朋友在雪地里找北方' })).toBeInTheDocument()
   expect(screen.getByText('你看到哪些地方让人觉得冷？')).toBeInTheDocument()

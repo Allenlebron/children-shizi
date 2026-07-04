@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter, useLocation } from 'react-router-dom'
 import { getDailyCard } from '../content/cards'
@@ -40,11 +40,9 @@ it('lets a parent finish the daily card and then see it on the profile page', as
   await user.click(screen.getByRole('button', { name: '下一页' }))
   await user.click(screen.getByRole('button', { name: '今天这张读完了' }))
 
-  await waitFor(() => {
-    expect(screen.getByTestId('location')).toHaveTextContent(/^\/$/)
-  })
+  expect(screen.getByText('小树又长大一点啦')).toBeInTheDocument()
 
-  await user.click(screen.getByRole('link', { name: '我的' }))
+  await user.click(screen.getByRole('button', { name: '去我的森林看看' }))
 
   expect(screen.getByTestId('location')).toHaveTextContent('/me')
   expect(screen.getByText('学过 1 张')).toBeInTheDocument()
